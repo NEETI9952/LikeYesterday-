@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="30dp"
+    tools:context=".LoginSignup.SignUp2">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/signup2BackButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:transitionName="back_image_transition"
+                android:src="@drawable/ic_baseline_arrow_back_24"/>
+
+            <TextView
+                android:id="@+id/signUp2Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Create \n Account"
+                android:textColor="@color/black"
+                android:textSize="40sp"
+                android:textAllCaps="true"
+                android:textStyle="bold"
+                android:layout_marginTop="20sp"
+                android:transitionName="createAccount_text_transition"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Choose Gender"
+                    android:textColor="@color/black" />
+
+                <RadioGroup
+                    android:id="@+id/radioGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/radioButtonFemale"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Female"
+                        android:layout_marginEnd="16dp"/>
+
+                    <RadioButton
+                        android:id="@+id/radioButtonMale"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="16dp"
+                        android:text="Male" />
+
+                    <RadioButton
+                        android:id="@+id/radioButtonOther"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Other" />
+
+                </RadioGroup>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_margin="16dp"
+                    android:outlineSpotShadowColor="@color/black"
+                    android:layout_height="2dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Date of Birth"
+                    android:layout_margin="8dp"
+                    android:textColor="@color/black" />
+
+                <DatePicker
+                    android:id="@+id/datePicker"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:calendarViewShown="false"
+                    android:datePickerMode="spinner"
+                    android:spinnersShown="true" />
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/signUp2NextButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Next"
+                android:onClick="callSignUpScreen3"
+                android:background="@color/black"
+                android:textColor="@color/white"
+                android:elevation="5dp"
+                android:layout_marginTop="16dp"
+                android:transitionName="next_button_transition"/>
+
+            <Button
+                android:id="@+id/signUp2LoginButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="login"
+                android:onClick="callLogin"
+                android:background="#00000000"
+                android:textColor="@color/black"
+                android:layout_marginTop="16dp"
+                android:transitionName="login_button_transition"/>
+
+        </LinearLayout>
+</ScrollView>
