@@ -1,16 +1,15 @@
 package com.example.likeyesterday.LoginSignup;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Pair;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.likeyesterday.R;
 import com.google.android.material.textfield.TextInputLayout;
@@ -46,7 +45,10 @@ public class SignUp3 extends AppCompatActivity {
         }
 
         String userPhoneNumber=phoneNumber.getEditText().getText().toString().trim();
-        String verificationPhoneNumber="+"+countryCodePicker.getFullNumber()+userPhoneNumber;
+
+        String verificationPhoneNumber="+91"+userPhoneNumber;
+        Log.i("testnumber","here"+userPhoneNumber.toString());
+//        Log.i("testnumber",countryCodePicker.getFullNumber()+userPhoneNumber.toString());
 
 //        String fullName=getIntent().getStringExtra("Fullname");
 //        String emailID=getIntent().getStringExtra("EmailID");
