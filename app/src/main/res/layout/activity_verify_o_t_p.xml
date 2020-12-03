@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".LoginSignup.VerifyOTP">
 
@@ -39,11 +40,12 @@
             android:textSize="25sp" />
 
         <TextView
+            android:id="@+id/textViewNumber"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="50dp"
-            android:text="Enter One Time Password sent on \n +919899195802"
+            android:text=""
             android:textAlignment="center"
             android:textSize="15sp" />
 
@@ -57,8 +59,8 @@
             android:layout_marginTop="30dp"
             android:cursorVisible="true"
             android:inputType="number"
-            android:itemBackground="@color/white"
             app:itemCount="6"
+            android:textColor="@color/black"
             app:itemHeight="40dp"
             app:itemWidth="40dp"
             app:lineColor="@color/grey"

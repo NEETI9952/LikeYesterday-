@@ -2,13 +2,13 @@
     <!-- Base application theme. -->
     <style name="Theme.LikeYesterday" parent="Theme.MaterialComponents.DayNight.NoActionBar.Bridge">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">#FFC107</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
-        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimary">#00000000</item>
+        <item name="colorPrimaryVariant">#00000000</item>
+        <item name="colorOnPrimary">#00000000</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">#00000000</item>
         <item name="colorSecondaryVariant">#00000000</item>
-        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorOnSecondary">#00000000</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->

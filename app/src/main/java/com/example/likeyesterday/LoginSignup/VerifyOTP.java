@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.chaos.view.PinView;
 import com.example.likeyesterday.R;
@@ -33,6 +34,7 @@ public class VerifyOTP extends AppCompatActivity {
     FirebaseAuth mAuth;
     ProgressBar progressBar;
     Button verify;
+    TextView textViewNumber;
 
 
     @Override
@@ -46,14 +48,15 @@ public class VerifyOTP extends AppCompatActivity {
         progressBar.setVisibility(View.GONE);
         verify=findViewById(R.id.verifyOtp);
         mAuth=FirebaseAuth.getInstance();
+        textViewNumber=findViewById(R.id.textViewNumber);
 
 
         String phoneNumber=getIntent().getStringExtra("PhoneNumber");
 //        String phoneNumber="+917678115795";
 
+        textViewNumber.setText("Enter One Time Password sent on \n "+phoneNumber);
+
         sendVerificationCodeToUser(phoneNumber);
-
-
     }
 
     private void sendVerificationCodeToUser(String phoneNumber) {
