@@ -35,7 +35,7 @@ public class SignUp3 extends AppCompatActivity {
         phoneNumber=findViewById(R.id.signUpPhoneNo);
         countryCodePicker=findViewById(R.id.countryCodePicker);
 
-        //countryCodePicker.registerCarrierNumberEditText(phoneNumber.getEditText());
+
     }
 
     public void  callOtpVerificationScreen(View view) {
@@ -45,29 +45,38 @@ public class SignUp3 extends AppCompatActivity {
         }
 
         String userPhoneNumber=phoneNumber.getEditText().getText().toString().trim();
+        Log.i("Verify number ",userPhoneNumber);
 
-        String verificationPhoneNumber="+91"+userPhoneNumber;
-        Log.i("testnumber","here"+userPhoneNumber.toString());
+        String ccp = countryCodePicker.getSelectedCountryCode();
+//       countryCodePicker.registerCarrierNumberEditText(phoneNumber.getEditText());
+        String verificationPhoneNumber="+"+ccp+userPhoneNumber.toString();
+
+//      String verificationPhoneNumber=countryCodePicker.getFullNumber()+userPhoneNumber.toString();
+        Log.i("Verify number",verificationPhoneNumber );
+
+//        String verificationPhoneNumber="+91"+userPhoneNumber;
+//        Log.i("testnumber","here"+userPhoneNumber.toString());
 //        Log.i("testnumber",countryCodePicker.getFullNumber()+userPhoneNumber.toString());
 
-//        String fullName=getIntent().getStringExtra("Fullname");
-//        String emailID=getIntent().getStringExtra("EmailID");
-//        String username=getIntent().getStringExtra("Username");
-//        String newPassword=getIntent().getStringExtra("Password");
-//        String gender=getIntent().getStringExtra("Gender");
-//        String dob=getIntent().getStringExtra("DOB");
+        String fullName=getIntent().getStringExtra("Fullname");
+        String emailID=getIntent().getStringExtra("EmailID");
+        String username=getIntent().getStringExtra("Username");
+        String newPassword=getIntent().getStringExtra("Password");
+        String gender=getIntent().getStringExtra("Gender");
+        String dob=getIntent().getStringExtra("DOB");
 
 
         Intent intent = new Intent(getApplicationContext(), VerifyOTP.class);
 
-//        intent.putExtra("Fullname",fullName);
-//        intent.putExtra("EmailID",emailID);
-//        intent.putExtra("Username",username);
-//        intent.putExtra("Password",newPassword);
-//        intent.putExtra("Gender",gender);
-//        intent.putExtra("DOB",dob);
+        intent.putExtra("Fullname",fullName);
+        intent.putExtra("EmailID",emailID);
+        intent.putExtra("Username",username);
+        intent.putExtra("Password",newPassword);
+        intent.putExtra("Gender",gender);
+        intent.putExtra("DOB",dob);
 
         intent.putExtra("PhoneNumber",verificationPhoneNumber);
+
         startActivity(intent);
     }
 
@@ -81,6 +90,7 @@ public class SignUp3 extends AppCompatActivity {
             phoneNumber.setError(null);
             phoneNumber.setErrorEnabled(false);
             return true;
+
         }
 
     }

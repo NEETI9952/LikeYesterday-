@@ -56,7 +56,7 @@ public class SignUp2 extends AppCompatActivity {
         day=datePicker.getDayOfMonth();
         month=datePicker.getMonth();
         year=datePicker.getYear();
-        dob=day+"/"+"/"+month+"/"+year;
+        dob=day+"/"+month+"/"+year;
 
         String fullName=getIntent().getStringExtra("Fullname");
         String emailID=getIntent().getStringExtra("EmailID");
