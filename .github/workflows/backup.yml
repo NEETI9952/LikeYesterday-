@@ -1,0 +1,21 @@
+name: Backup Firestore@3
+
+on:
+  schedule:
+    - cron: '30 16 * * *'
+
+env:
+  PROJECT_ID: likeyesterday-fd13b
+  BUCKET: gs://backupfirestorecrontesting
+  
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+      with:
+        service_account_key: ${{ secrets.GCP_SA_KEY }}
+        export_default_credentials: true
+    - run: gcloud info
+    - run: gcloud config set project $PROJECT_ID
+    - run: gcloud firestore export $BUCKET
