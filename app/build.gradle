@@ -40,6 +40,7 @@ dependencies {
     implementation 'com.chaos.view:pinview:1.4.3'
     implementation 'com.hbb20:ccp:2.4.0'
     implementation "androidx.browser:browser:1.2.0"
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
     testImplementation 'junit:junit:4.13.1'
     implementation 'com.google.android.material:material:1.2.1'

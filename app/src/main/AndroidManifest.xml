@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.LikeYesterday">
-        <activity android:name=".LoginSignup.userProfile"></activity>
+        <activity android:name=".HomeScreenActivity2"></activity>
+        <activity android:name=".LoginSignup.userProfile" />
         <activity android:name=".LoginSignup.VerifyOTP" />
         <activity android:name=".LoginSignup.SignUp3" />
         <activity android:name=".LoginSignup.SignUp2" />

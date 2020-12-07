@@ -14,7 +14,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.chaos.view.PinView;
+import com.example.likeyesterday.HomeScreenActivity2;
 import com.example.likeyesterday.MainActivity;
+import com.example.likeyesterday.ProfileFragment;
 import com.example.likeyesterday.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -157,7 +159,7 @@ public class VerifyOTP extends AppCompatActivity {
                                             DocumentReference requestReference = db.collection(uid).document("Request");
 //                                            Map<String,Object> friends = new HashMap<>();
 //                                            friends.put("No. of friends",fullName);
-                                            Intent intent= new Intent(getApplicationContext(),userProfile.class);
+                                            Intent intent= new Intent(getApplicationContext(), HomeScreenActivity2.class);
                                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                             intent.putExtra("uid",uid);
                                             startActivity(intent);
