@@ -16,13 +16,21 @@ import android.widget.TextView;
 import com.example.likeyesterday.MainActivity;
 import com.example.likeyesterday.R;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.hbb20.CountryCodePicker;
 
 public class Login extends AppCompatActivity {
     ImageView backButton;
-    Button createUser,login;
+    Button createUser,getOtpButton;
     TextView titleText;
-    TextInputLayout username,password;
+    TextInputLayout phoneNumber;
     CheckBox checkBox;
+    CountryCodePicker countryCodePicker;
+    private FirebaseFirestore db= FirebaseFirestore.getInstance();
+    private CollectionReference collRef;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,22 +40,22 @@ public class Login extends AppCompatActivity {
 
         backButton=findViewById(R.id.loginBackButton);
         createUser=findViewById(R.id.loginCreateUser);
-        login=findViewById(R.id.loginButton);
+        getOtpButton=findViewById(R.id.loginGetOtpButton);
         titleText=findViewById(R.id.loginTextView);
-        username=findViewById(R.id.loginPhoneNumber);
-        password=findViewById(R.id.loginpassword);
+        phoneNumber=findViewById(R.id.loginPhoneNumber);
         checkBox=findViewById(R.id.rememberMeCheckBox);
+        countryCodePicker=findViewById(R.id.loginCcp);
 
     }
 
-    public void  callSignUpScreen(View view){
+    public void callLoginWithEmailScreen(View view){
 
-        Intent intent= new Intent(getApplicationContext(),Signup.class);
+        Intent intent= new Intent(getApplicationContext(),LoginWithEmail.class);
 
         Pair[] pairs= new Pair[4];
         pairs[0]= new Pair<View,String>(backButton,"back_image_transition");
         pairs[1]= new Pair<View,String>(titleText,"createAccount_text_transition");
-        pairs[2]= new Pair<View,String>(login,"next_button_transition");
+        pairs[2]= new Pair<View,String>(getOtpButton,"next_button_transition");
         pairs[3]= new Pair<View,String>(createUser,"login_button_transition");
 
         ActivityOptions options=ActivityOptions.makeSceneTransitionAnimation(Login.this,pairs);
@@ -55,19 +63,43 @@ public class Login extends AppCompatActivity {
 
     }
 
-    public void login() {
-        //move to next activity
-        Intent intent = new Intent(this, MainActivity.class);
+    public void  callSignUpScreen(View view){
+
+        Intent intent2= new Intent(getApplicationContext(),Signup.class);
+
+        Pair[] pairs2= new Pair[4];
+        pairs2[0]= new Pair<View,String>(backButton,"back_image_transition");
+        pairs2[1]= new Pair<View,String>(titleText,"createAccount_text_transition");
+        pairs2[2]= new Pair<View,String>(getOtpButton,"next_button_transition");
+        pairs2[3]= new Pair<View,String>(createUser,"login_button_transition");
+
+        ActivityOptions options2=ActivityOptions.makeSceneTransitionAnimation(Login.this,pairs2);
+        startActivity(intent2,options2.toBundle());
+
+    }
+
+
+    public void getOtp(View view){
+
+        if(!validateFields()){
+            return;
+        }
+        String phoneNumberText=phoneNumber.getEditText().getText().toString().trim();
+        String ccp = countryCodePicker.getSelectedCountryCode();
+        String verificationPhoneNumber="+"+ccp+phoneNumber.toString();
+
+        Intent intent = new Intent(getApplicationContext(), VerifyOTPLogin.class);
+        intent.putExtra("PhoneNumber",verificationPhoneNumber);
         startActivity(intent);
     }
 
-    public void onLogin(View view){
-
+    private boolean validateFields() {
+        return true;
     }
+
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        this.finishAffinity();
     }
 }

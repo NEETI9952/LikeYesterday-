@@ -16,10 +16,11 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-
-import static com.example.likeyesterday.LoginSignup.VerifyOTP.db;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 
 public class ProfileFragment extends Fragment {
@@ -29,9 +30,11 @@ public class ProfileFragment extends Fragment {
     TextInputLayout emailID,fullName,password,phoneNumber;
     private Boolean fullNameChange,emailChange,phoneNoChange,passwordChange;
 
+    public FirebaseFirestore db= FirebaseFirestore.getInstance();
     DocumentReference user_profileReference;
 
-    String uid;
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    String uid = user.getUid();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -49,8 +52,8 @@ public class ProfileFragment extends Fragment {
         phoneNumber=root.findViewById(R.id.phoneNumberProfile);
 
 
-        uid=getActivity().getIntent().getStringExtra("uid");
-        Log.i("uid",uid);
+//        uid=getActivity().getIntent().getStringExtra("uid");
+//        Log.i("uid",uid);
 
         user_profileReference = db.collection(uid).document("User Profile");
 

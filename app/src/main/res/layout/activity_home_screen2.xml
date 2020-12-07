@@ -20,7 +20,7 @@
             android:layout_height="?attr/actionBarSize"
             android:elevation="4dp"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:navigationIcon="@android:drawable/ic_menu_sort_by_size"
+            app:navigationIcon="@drawable/ic_baseline_view_headline_24"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
         <FrameLayout
@@ -30,7 +30,6 @@
 
     </LinearLayout>
 
-
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigation"
         android:layout_width="wrap_content"
@@ -38,13 +37,5 @@
         android:layout_gravity="start"
         app:headerLayout="@layout/nav_header"
         app:menu="@menu/main_menu" />
-
-
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-    </ScrollView>
 
 </androidx.drawerlayout.widget.DrawerLayout>

@@ -1,12 +1,10 @@
 package com.example.likeyesterday.LoginSignup;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -15,24 +13,24 @@ import com.example.likeyesterday.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
-
-import static com.example.likeyesterday.LoginSignup.VerifyOTP.db;
 
 public class userProfile extends AppCompatActivity {
     Button update;
     TextView fullNameProfile,usernameProfile,friendsLabel,requestsLabel;
-    TextInputLayout emailID,fullName,password,phoneNumber;
-    private Boolean fullNameChange,emailChange,phoneNoChange,passwordChange;
+    TextInputLayout emailID,fullName,phoneNumber;
+    private Boolean fullNameChange,emailChange,phoneNoChange;
 
+    public FirebaseFirestore db= FirebaseFirestore.getInstance();
     DocumentReference user_profileReference;
 
-    String uid;
-
-//    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-//    String uid = user.getUid();
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    String uid = user.getUid();
 
 
     @Override
@@ -47,11 +45,12 @@ public class userProfile extends AppCompatActivity {
         requestsLabel=findViewById(R.id.requestsLabel);
         fullName=findViewById(R.id.fullNameProf);
         emailID=findViewById(R.id.emailIDProfile);
-        password=findViewById(R.id.passwordProfile);
         phoneNumber=findViewById(R.id.phoneNumberProfile);
 
-        uid=getIntent().getStringExtra("uid");
-        Log.i("uid",uid);
+
+
+//        uid=getIntent().getStringExtra("uid");
+//        Log.i("uid",uid);
 
         user_profileReference = db.collection(uid).document("User Profile");
 
@@ -66,13 +65,11 @@ public class userProfile extends AppCompatActivity {
                             usernameProfile.setText(documentSnapshot.getString("Username"));
                             emailID.getEditText().setText(documentSnapshot.getString("Email ID"));
                             phoneNumber.getEditText().setText(documentSnapshot.getString("Phone Number"));
-                            password.getEditText().setText(documentSnapshot.getString("Password"));
                             friendsLabel.setText(documentSnapshot.get("Number of friends").toString());
                             requestsLabel.setText(documentSnapshot.get("Number of requests").toString());
                             fullNameChange=false;
                             emailChange=false;
                             phoneNoChange=false;
-                            passwordChange=false;
                         }
                     }
                 })
@@ -134,45 +131,45 @@ public class userProfile extends AppCompatActivity {
             }
         });
 
-        password.getEditText().addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                passwordChange=true;
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
+//        password.getEditText().addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                passwordChange=true;
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//
+//            }
+//        });
 
 
         update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!passwordChange && !emailChange && !phoneNoChange && !fullNameChange){
+                if(!emailChange && !phoneNoChange && !fullNameChange){
                     Toast.makeText(userProfile.this, "Already up to date!", Toast.LENGTH_SHORT).show();
                 }
-                if(passwordChange){
-                    user_profileReference.update("Password",password.getEditText().getText().toString().trim());
-                    Toast.makeText(userProfile.this, "Successfully updated!", Toast.LENGTH_SHORT).show();
-                    fullNameChange=false;
-                    emailChange=false;
-                    phoneNoChange=false;
-                    passwordChange=false;
-                }
+//                if(passwordChange){
+//                    user_profileReference.update("Password",password.getEditText().getText().toString().trim());
+//                    Toast.makeText(userProfile.this, "Successfully updated!", Toast.LENGTH_SHORT).show();
+//                    fullNameChange=false;
+//                    emailChange=false;
+//                    phoneNoChange=false;
+//                    passwordChange=false;
+//                }
                 if(emailChange){
                     user_profileReference.update("Email ID",emailID.getEditText().getText().toString().trim());
                     Toast.makeText(userProfile.this, "Successfully updated!", Toast.LENGTH_SHORT).show();
                     fullNameChange=false;
                     emailChange=false;
                     phoneNoChange=false;
-                    passwordChange=false;
+//                    passwordChange=false;
                 }
                 if(phoneNoChange){
 //                    user_profileReference.update("Phone Number",phoneNumber.getEditText().getText().toString());
@@ -187,7 +184,7 @@ public class userProfile extends AppCompatActivity {
                                         fullNameChange=false;
                                         emailChange=false;
                                         phoneNoChange=false;
-                                        passwordChange=false;
+//                                        passwordChange=false;
                                     }
                                 }
                             })
@@ -218,7 +215,7 @@ public class userProfile extends AppCompatActivity {
                     fullNameChange=false;
                     emailChange=false;
                     phoneNoChange=false;
-                    passwordChange=false;
+//                    passwordChange=false;
                 }
             }
         });
