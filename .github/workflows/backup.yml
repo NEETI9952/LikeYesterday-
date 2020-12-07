@@ -1,8 +1,8 @@
-name: Backup Firestore@3
+name: Backup Firestore@4
 
 on:
   schedule:
-    - cron: '30 16 * * *'
+    - cron: '40 16 * * *'
 
 env:
   PROJECT_ID: likeyesterday-fd13b
