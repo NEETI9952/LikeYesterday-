@@ -20,6 +20,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
 public class FriendsListFragment extends Fragment {
+
+
+    public static String friendUid;
 //    FloatingActionButton add;
     public static FirebaseFirestore db= FirebaseFirestore.getInstance();
 
