@@ -6,6 +6,7 @@ public class FirestoreRecyclerModelClass {
     private String FullName;
 
     public FirestoreRecyclerModelClass(){
+
     }
 
     public String getFullName() {

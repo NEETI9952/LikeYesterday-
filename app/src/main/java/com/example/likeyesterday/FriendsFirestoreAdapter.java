@@ -37,6 +37,7 @@ public class FriendsFirestoreAdapter extends FirestoreRecyclerAdapter<FirestoreR
     }
 
     class FriendsVH extends RecyclerView.ViewHolder{
+
         TextView friendName;
 
 
