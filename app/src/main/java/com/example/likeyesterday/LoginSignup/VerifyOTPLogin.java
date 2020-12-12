@@ -60,7 +60,7 @@ public class VerifyOTPLogin extends AppCompatActivity {
         textViewNumber=findViewById(R.id.textViewNumber);
 
 
-        phoneNumber=getIntent().getStringExtra("PhoneNumber");
+        phoneNumber=getIntent().getStringExtra("PhoneNumberLogin");
         textViewNumber.setText("Enter One Time Password sent on \n   "+phoneNumber);
 
         sendVerificationCodeToUser(phoneNumber);
@@ -123,7 +123,6 @@ public class VerifyOTPLogin extends AppCompatActivity {
                             Intent intent= new Intent(getApplicationContext(),HomeScreenActivity2.class);
 //                            friend list or home
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,null).commit();
                             startActivity(intent);
                         } else {
                             Toast.makeText(VerifyOTPLogin.this,task.getException().getMessage(),Toast.LENGTH_SHORT).show();

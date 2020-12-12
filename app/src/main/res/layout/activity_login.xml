@@ -93,7 +93,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="30dp"
-                    android:layout_weight="1"
+
                     android:buttonTint="@color/black"
                     android:text="Remember Me"
                     android:textColor="@color/black" />

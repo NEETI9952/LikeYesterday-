@@ -140,7 +140,7 @@ public class VerifyOTP extends AppCompatActivity {
                             Log.d("Otp", "signInWithCredential:success");
                             FirebaseUser user = task.getResult().getUser();
                             String uid = user.getUid();
-                            DocumentReference user_profileReference = db.collection(uid).document("User Profile");
+                            DocumentReference user_profileReference = db.collection("Users").document(uid);
 
                             Map<String,Object> profile = new HashMap<>();
                             profile.put("Full Name",fullName);

@@ -27,8 +27,8 @@ public class ProfileFragment extends Fragment {
 
     Button update;
     TextView fullNameProfile,usernameProfile,friendsLabel,requestsLabel;
-    TextInputLayout emailID,fullName,password,phoneNumber;
-    private Boolean fullNameChange,emailChange,phoneNoChange,passwordChange;
+    TextInputLayout emailID,fullName,phoneNumber;
+    private Boolean fullNameChange,emailChange,phoneNoChange;
 
     public FirebaseFirestore db= FirebaseFirestore.getInstance();
     DocumentReference user_profileReference;
@@ -48,14 +48,13 @@ public class ProfileFragment extends Fragment {
         requestsLabel=root.findViewById(R.id.requestsLabel);
         fullName=root.findViewById(R.id.fullNameProf);
         emailID=root.findViewById(R.id.emailIDProfile);
-        password=root.findViewById(R.id.passwordProfile);
         phoneNumber=root.findViewById(R.id.phoneNumberProfile);
 
 
 //        uid=getActivity().getIntent().getStringExtra("uid");
 //        Log.i("uid",uid);
 
-        user_profileReference = db.collection(uid).document("User Profile");
+        user_profileReference = db.collection("Users").document(uid);
 
         user_profileReference.get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -68,13 +67,13 @@ public class ProfileFragment extends Fragment {
                             usernameProfile.setText(documentSnapshot.getString("Username"));
                             emailID.getEditText().setText(documentSnapshot.getString("Email ID"));
                             phoneNumber.getEditText().setText(documentSnapshot.getString("Phone Number"));
-                            password.getEditText().setText(documentSnapshot.getString("Password"));
+//                            password.getEditText().setText(documentSnapshot.getString("Password"));
                             friendsLabel.setText(documentSnapshot.get("Number of friends").toString());
                             requestsLabel.setText(documentSnapshot.get("Number of requests").toString());
                             fullNameChange=false;
                             emailChange=false;
                             phoneNoChange=false;
-                            passwordChange=false;
+//                            passwordChange=false;
                         }
                     }
                 })
@@ -136,44 +135,44 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        password.getEditText().addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                passwordChange=true;
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
+//        password.getEditText().addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                passwordChange=true;
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//
+//            }
+//        });
 
         update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!passwordChange && !emailChange && !phoneNoChange && !fullNameChange){
+                if( !emailChange && !phoneNoChange && !fullNameChange){
                     Toast.makeText(getActivity(), "Already up to date!", Toast.LENGTH_SHORT).show();
                 }
-                if(passwordChange){
-                    user_profileReference.update("Password",password.getEditText().getText().toString().trim());
-                    Toast.makeText(getActivity(), "Successfully updated!", Toast.LENGTH_SHORT).show();
-                    fullNameChange=false;
-                    emailChange=false;
-                    phoneNoChange=false;
-                    passwordChange=false;
-                }
+//                if(passwordChange){
+//                    user_profileReference.update("Password",password.getEditText().getText().toString().trim());
+//                    Toast.makeText(getActivity(), "Successfully updated!", Toast.LENGTH_SHORT).show();
+//                    fullNameChange=false;
+//                    emailChange=false;
+//                    phoneNoChange=false;
+//                    passwordChange=false;
+//                }
                 if(emailChange){
                     user_profileReference.update("Email ID",emailID.getEditText().getText().toString().trim());
                     Toast.makeText(getActivity(), "Successfully updated!", Toast.LENGTH_SHORT).show();
                     fullNameChange=false;
                     emailChange=false;
                     phoneNoChange=false;
-                    passwordChange=false;
+//                    passwordChange=false;
                 }
                 if(phoneNoChange){
 //                    user_profileReference.update("Phone Number",phoneNumber.getEditText().getText().toString());
@@ -188,7 +187,7 @@ public class ProfileFragment extends Fragment {
                                         fullNameChange=false;
                                         emailChange=false;
                                         phoneNoChange=false;
-                                        passwordChange=false;
+//                                        passwordChange=false;
                                     }
                                 }
                             })
@@ -219,7 +218,7 @@ public class ProfileFragment extends Fragment {
                     fullNameChange=false;
                     emailChange=false;
                     phoneNoChange=false;
-                    passwordChange=false;
+//                    passwordChange=false;
                 }
             }
         });

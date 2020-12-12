@@ -86,10 +86,10 @@ public class Login extends AppCompatActivity {
         }
         String phoneNumberText=phoneNumber.getEditText().getText().toString().trim();
         String ccp = countryCodePicker.getSelectedCountryCode();
-        String verificationPhoneNumber="+"+ccp+phoneNumber.toString();
+        String verificationPhoneNumber="+"+ccp+phoneNumberText;
 
         Intent intent = new Intent(getApplicationContext(), VerifyOTPLogin.class);
-        intent.putExtra("PhoneNumber",verificationPhoneNumber);
+        intent.putExtra("PhoneNumberLogin",verificationPhoneNumber);
         startActivity(intent);
     }
 

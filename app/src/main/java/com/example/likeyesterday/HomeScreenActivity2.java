@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.example.likeyesterday.LoginSignup.StartActivity;
@@ -27,6 +28,7 @@ public class HomeScreenActivity2 extends AppCompatActivity implements Navigation
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen2);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -67,11 +69,11 @@ public class HomeScreenActivity2 extends AppCompatActivity implements Navigation
 //                startActivity(intent);
                 break;
             case R.id.nav_friends:
-//                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new music_library()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new FriendsListFragment()).commit();
 
                 break;
             case R.id.nav_my_places:
-//                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new my_favourites()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new MyPlacesMapsFragment()).commit();
                 break;
             case R.id.nav_email_us:
                 Intent emailIntent= new Intent(Intent.ACTION_SEND);

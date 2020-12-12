@@ -10,7 +10,10 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 
+import com.example.likeyesterday.HomeScreenActivity2;
 import com.example.likeyesterday.R;
+
+import static com.example.likeyesterday.LoginSignup.LoginWithEmail.mAuth;
 
 public class StartActivity extends AppCompatActivity {
 
@@ -21,30 +24,29 @@ public class StartActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_start);
 
+        if (mAuth.getCurrentUser() != null) {
+            login();
+
+        }
+
     }
     public void goToLoginScreen(View v){
         Intent intent= new Intent(getApplicationContext(),Login.class);
 
         Pair[] pairs = new Pair[1];
         pairs[0]=new Pair<View,String>(findViewById(R.id.loginButton),"loginTransition");
-
         ActivityOptions options=ActivityOptions.makeSceneTransitionAnimation(StartActivity.this,pairs);
         startActivity(intent,options.toBundle());
     }
 
     public void  callSignUpScreen(View view){
-
         Intent intent= new Intent(getApplicationContext(),Signup.class);
-
-//        Pair[] pairs= new Pair[4];
-//        pairs[0]= new Pair<View,String>(backButton,"back_image_transition");
-//        pairs[1]= new Pair<View,String>(titleText,"createAccount_text_transition");
-//        pairs[2]= new Pair<View,String>(login,"next_button_transition");
-//        pairs[3]= new Pair<View,String>(createUser,"login_button_transition");
-//
-//        ActivityOptions options=ActivityOptions.makeSceneTransitionAnimation(Login.this,pairs);
-//        startActivity(intent,options.toBundle());
         startActivity(intent);
     }
 
+    public void login() {
+        //move to next activity
+        Intent intent = new Intent(this, HomeScreenActivity2.class);
+        startActivity(intent);
+    }
 }

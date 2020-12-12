@@ -33,7 +33,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@+id/profilePicture"
                 android:textColor="@color/black"
-                android:textSize="30sp"
+                android:textSize="32sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -47,8 +47,7 @@
                 android:layout_toRightOf="@+id/profilePicture"
                 android:fontFamily="sans-serif"
                 android:textColor="#595555"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textSize="20sp" />
 
 
         </RelativeLayout>
@@ -162,12 +161,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
+                android:background="@color/white"
                 android:hint="Full Name"
                 app:hintTextColor="@color/black">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@color/white"
                     android:drawableLeft="@drawable/ic_baseline_person_outline_24"
                     android:drawablePadding="10dp" />
 
@@ -184,6 +185,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@color/white"
                     android:drawableLeft="@drawable/ic_baseline_phone_24"
                     android:drawablePadding="10dp" />
 
@@ -200,32 +202,12 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@color/white"
                     android:drawableLeft="@drawable/ic_baseline_email_24"
                     android:drawablePadding="10dp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/passwordProfile"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:hint="Password"
-                app:boxStrokeWidthFocused="2dp"
-                app:hintTextColor="@color/black"
-                app:passwordToggleEnabled="true"
-                app:passwordToggleTint="@color/black"
-                app:startIconDrawable="@drawable/ic_baseline_lock_24"
-                app:startIconTint="@color/black">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_baseline_lock_24"
-                    android:drawablePadding="10dp"
-                    android:inputType="textPassword" />
-
-            </com.google.android.material.textfield.TextInputLayout>
 
             <Button
                 android:id="@+id/updateProfile"
@@ -235,6 +217,7 @@
                 android:background="@color/yellow"
                 android:text="UPDATE"
                 android:textColor="@color/black"
+                android:textColorLink="#009688"
                 android:textStyle="bold" />
         </LinearLayout>
     </LinearLayout>

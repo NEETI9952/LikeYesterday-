@@ -49,7 +49,7 @@ public class SignUp3 extends AppCompatActivity {
 
         String ccp = countryCodePicker.getSelectedCountryCode();
 //       countryCodePicker.registerCarrierNumberEditText(phoneNumber.getEditText());
-        String verificationPhoneNumber="+"+ccp+userPhoneNumber.toString();
+        String verificationPhoneNumber="+"+ccp+userPhoneNumber;
 
 //      String verificationPhoneNumber=countryCodePicker.getFullNumber()+userPhoneNumber.toString();
         Log.i("Verify number",verificationPhoneNumber );
