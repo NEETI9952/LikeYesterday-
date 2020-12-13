@@ -1,6 +1,5 @@
 package com.example.likeyesterday;
 
-import android.app.Application;
 import android.database.Cursor;
 import android.os.Bundle;
 
@@ -15,21 +14,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.example.likeyesterday.LoginSignup.UserObject;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+
+import static android.content.Context.TELEPHONY_SERVICE;
 
 
 public class AddFriendsFragment extends Fragment {
@@ -89,8 +85,8 @@ public class AddFriendsFragment extends Fragment {
     private void initializeRecyclerView() {
         userListRecyclerView.setNestedScrollingEnabled(false);
         userListRecyclerView.setHasFixedSize(false);
-//        userListLayoutManager = new LinearLayoutManager(getContext(), LinearLayout.VERTICAL, false);
-//        userListRecyclerView.setLayoutManager(userListLayoutManager);
+        userListLayoutManager = new LinearLayoutManager(getContext());
+        userListRecyclerView.setLayoutManager(userListLayoutManager);
         userListAdapter=new UserListAdapter(userList);
         userListRecyclerView.setAdapter(userListAdapter);
     }
@@ -109,6 +105,13 @@ public class AddFriendsFragment extends Fragment {
                             String name= documentSnapshot.get("Full Name").toString();
 
                             UserObject user=new UserObject(name,phoneNumber);
+                            if (name.equals(phoneNumber))
+                                for(UserObject mContactIterator : contactList){
+                                    if(mContactIterator.getPhone().equals(user.getPhone())){
+                                        user.setName(mContactIterator.getName());
+                                    }
+                                }
+
                             userList.add(user);
                             userListAdapter.notifyDataSetChanged();
                             return;
@@ -127,7 +130,7 @@ public class AddFriendsFragment extends Fragment {
 
     private String getCountryISO(){
         String iso=null;
-        TelephonyManager telephonyManager= (TelephonyManager) getContext().getSystemService(getContext().TELEPHONY_SERVICE);
+        TelephonyManager telephonyManager= (TelephonyManager) getContext().getSystemService(TELEPHONY_SERVICE);
         if(telephonyManager.getNetworkCountryIso()!=null){
             if (telephonyManager.getNetworkCountryIso().equals(""));{
                 iso=telephonyManager.getNetworkCountryIso();

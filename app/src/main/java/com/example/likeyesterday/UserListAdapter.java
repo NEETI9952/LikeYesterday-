@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.likeyesterday.LoginSignup.UserObject;
+
 import java.util.ArrayList;
 
 public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.UserListViewHolder> {
@@ -21,9 +21,6 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.UserLi
     @Override
     public UserListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.add_user_list_item, null, false);
-        RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutView.setLayoutParams(lp);
-
         UserListViewHolder rcv = new UserListViewHolder(layoutView);
         return rcv;
     }
