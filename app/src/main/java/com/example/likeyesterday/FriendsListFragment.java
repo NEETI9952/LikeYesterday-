@@ -30,8 +30,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
 public class FriendsListFragment extends Fragment {
+
     public static final int PERMISSIONS_REQUEST_READ_CONTACTS = 1;
     FloatingActionButton add;
+
+    public static String friendUid;
 
     public static FirebaseFirestore db= FirebaseFirestore.getInstance();
 

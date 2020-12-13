@@ -4,8 +4,18 @@ package com.example.likeyesterday;
 public class FirestoreRecyclerModelClass {
 
     private String FullName;
+    private String friendUid;
+
+    public String getFriendUid() {
+        return friendUid;
+    }
+
+    public void setFriendUid(String friendUid) {
+        this.friendUid = friendUid;
+    }
 
     public FirestoreRecyclerModelClass(){
+
     }
 
     public String getFullName() {
@@ -16,7 +26,8 @@ public class FirestoreRecyclerModelClass {
         FullName = fullName;
     }
 
-    public FirestoreRecyclerModelClass(String fullName) {
+    public FirestoreRecyclerModelClass(String fullName,String friendUid) {
+        this.friendUid=friendUid;
         FullName = fullName;
     }
 }
