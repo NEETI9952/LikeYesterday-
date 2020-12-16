@@ -4,12 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="8dp"
     android:orientation="vertical"
-    tools:context=".AddFriendsFragment">
+    android:padding="8dp"
+    tools:context=".FriendsListFragment">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/userList"
+        android:id="@+id/recyclerRequests"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingBottom="4dp"

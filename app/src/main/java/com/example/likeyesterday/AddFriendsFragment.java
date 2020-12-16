@@ -18,8 +18,13 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -37,6 +42,10 @@ public class AddFriendsFragment extends Fragment {
     ArrayList<UserObject> userList,contactList;
 
     FirebaseFirestore db= FirebaseFirestore.getInstance();
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    String uid = user.getUid();
+
+    String phoneNumberCurrentUser;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,7 +71,8 @@ public class AddFriendsFragment extends Fragment {
     private void getContactList() {
         String ISOPrefix = getCountryISO();
 
-        Cursor phones = getContext().getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
+        Cursor phones = getContext().getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, ContactsContract.Contacts.Entity.RAW_CONTACT_ID +
+                " ASC");
 
         while(phones.moveToNext()){
             String name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
@@ -87,7 +97,7 @@ public class AddFriendsFragment extends Fragment {
         userListRecyclerView.setHasFixedSize(false);
         userListLayoutManager = new LinearLayoutManager(getContext());
         userListRecyclerView.setLayoutManager(userListLayoutManager);
-        userListAdapter=new UserListAdapter(userList);
+        userListAdapter=new UserListAdapter(getContext(),userList);
         userListRecyclerView.setAdapter(userListAdapter);
     }
 
@@ -99,6 +109,8 @@ public class AddFriendsFragment extends Fragment {
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+
+
                         for(QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
 
                             String phoneNumber=documentSnapshot.get("Phone Number").toString();
@@ -112,11 +124,39 @@ public class AddFriendsFragment extends Fragment {
                                     }
                                 }
 
-                            userList.add(user);
-                            userListAdapter.notifyDataSetChanged();
+                            DocumentReference currentUserDocumentReference = db.collection("Users").document(uid);
+                            currentUserDocumentReference.get()
+                                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                            if (documentSnapshot.exists()) {
+                                                phoneNumberCurrentUser=documentSnapshot.get("Phone Number").toString();
+                                            }
+                                        }
+                                    });
+
+                            CollectionReference friendListReference = db.collection("Users").document(uid).collection("FriendsList");
+                            friendListReference
+                                    .whereEqualTo("PhoneNumber",mContact.getPhone())
+                                    .get()
+                                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                            if(queryDocumentSnapshots.size()==0 && !mContact.getPhone().equals(phoneNumberCurrentUser)) {
+                                                userList.add(user);
+                                                userListAdapter.notifyDataSetChanged();
+                                            }
+
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.d("Add friend",e.toString());
+                                        }
+                                    });
                             return;
                         }
-
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

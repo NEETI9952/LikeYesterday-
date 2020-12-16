@@ -12,10 +12,13 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.likeyesterday.HomeScreenActivity2;
 import com.example.likeyesterday.R;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.Objects;
+
+import static com.example.likeyesterday.LoginSignup.LoginWithEmail.mAuth;
 
 public class Signup extends AppCompatActivity {
     ImageView backButton;
@@ -29,6 +32,10 @@ public class Signup extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_signup);
 
+        if (mAuth.getCurrentUser() != null) {
+            login();
+        }
+
         backButton=findViewById(R.id.signupBackButton);
         next=findViewById(R.id.signUpNextButton);
         login=findViewById(R.id.signUpLoginButton);
@@ -39,6 +46,13 @@ public class Signup extends AppCompatActivity {
         emailID=findViewById(R.id.signUpEmailTextView);
         newPassword=findViewById(R.id.signUpNewPassword);
         confirmPassword=findViewById(R.id.signUpConfirmPassword);
+    }
+
+
+    public void login() {
+        //move to next activity
+        Intent intent = new Intent(this, HomeScreenActivity2.class);
+        startActivity(intent);
     }
 
     public void  callSignUpScreen2(View view){

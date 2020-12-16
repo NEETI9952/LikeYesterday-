@@ -3,10 +3,14 @@ package com.example.likeyesterday;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -15,12 +19,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -62,7 +60,7 @@ public class FriendsListFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         uid = mAuth.getCurrentUser().getUid();
 
-        recyclerView=root.findViewById(R.id.recyclerView);
+        recyclerView=root.findViewById(R.id.recyclerRequests);
 
         add=(FloatingActionButton) root.findViewById(R.id.addFriendButton);
         add.setOnClickListener(new View.OnClickListener() {
@@ -79,12 +77,12 @@ public class FriendsListFragment extends Fragment {
 
     private void setRecyclerView() {
 
-        Query query=userColRef.document(uid).collection("FriendsList").orderBy("FullName", Query.Direction.DESCENDING);
+        Query query=userColRef.document(uid).collection("FriendsList").orderBy("FullName", Query.Direction.ASCENDING);
 
-        Log.i("login",uid);
+        Log.i("Friend List",uid);
 
         FirestoreRecyclerOptions<FirestoreRecyclerModelClass> options=new FirestoreRecyclerOptions.Builder<FirestoreRecyclerModelClass>().setQuery(query,FirestoreRecyclerModelClass.class).build();
-        friendsFirestoreAdapter=new FriendsFirestoreAdapter(options);
+        friendsFirestoreAdapter=new FriendsFirestoreAdapter(getContext(),options);
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));

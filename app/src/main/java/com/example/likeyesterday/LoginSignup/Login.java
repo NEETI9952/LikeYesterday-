@@ -13,6 +13,7 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.likeyesterday.HomeScreenActivity2;
 import com.example.likeyesterday.MainActivity;
 import com.example.likeyesterday.R;
 import com.google.android.material.textfield.TextInputLayout;
@@ -20,6 +21,8 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.hbb20.CountryCodePicker;
+
+import static com.example.likeyesterday.LoginSignup.LoginWithEmail.mAuth;
 
 public class Login extends AppCompatActivity {
     ImageView backButton;
@@ -38,6 +41,10 @@ public class Login extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_login);
 
+        if (mAuth.getCurrentUser() != null) {
+            login();
+        }
+
         backButton=findViewById(R.id.loginBackButton);
         createUser=findViewById(R.id.loginCreateUser);
         getOtpButton=findViewById(R.id.loginGetOtpButton);
@@ -46,6 +53,12 @@ public class Login extends AppCompatActivity {
         checkBox=findViewById(R.id.rememberMeCheckBox);
         countryCodePicker=findViewById(R.id.loginCcp);
 
+    }
+
+    public void login() {
+        //move to next activity
+        Intent intent = new Intent(this, HomeScreenActivity2.class);
+        startActivity(intent);
     }
 
     public void callLoginWithEmailScreen(View view){

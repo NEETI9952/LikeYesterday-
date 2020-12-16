@@ -6,16 +6,26 @@
     android:layout_height="wrap_content"
     android:outlineAmbientShadowColor="#000000"
     android:outlineSpotShadowColor="#000000"
-    android:layout_marginBottom="4dp"
     app:cardCornerRadius="10dp"
-    app:cardElevation="10dp">
+    app:cardElevation="10dp"
+    android:padding="4dp"
+    android:clipToPadding="false"
+    android:layout_marginStart="5dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginEnd="5dp"
+    app:cardUseCompatPadding="true"
+    app:cardPreventCornerOverlap="false"
+    android:clickable="true"
+    android:focusable="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/addUserConstraintLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginHorizontal="8dp"
         android:layout_marginVertical="8dp"
-        android:padding="8dp"
+        android:clickable="true"
+        android:focusable="true"
         android:orientation="vertical">
 
         <TextView
@@ -23,30 +33,39 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="329dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginTop="8dp"
             android:text="TextView"
-            android:textSize="30dp"
-            app:layout_constraintBottom_toBottomOf="@+id/phoneNumberTextViewFriendsList"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/phoneNumberTextViewAddFriendsList"
+            app:layout_constraintStart_toEndOf="@+id/imageViewProfilePictureAddFriendsList"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/imageViewProfilePictureAddFriendsList"
+            android:layout_width="58dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="290dp"
+            android:layout_marginBottom="5dp"
+            android:src="@drawable/ic_round_account_circle_24"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/phoneNumberTextViewFriendsList"
+            android:id="@+id/phoneNumberTextViewAddFriendsList"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="44dp"
-            android:layout_marginEnd="329dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="4dp"
             android:text="TextView"
-            android:textSize="15dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/nameTextViewAddFriendsList" />
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/imageViewProfilePictureAddFriendsList"
+            app:layout_constraintTop_toBottomOf="@+id/nameTextViewAddFriendsList" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

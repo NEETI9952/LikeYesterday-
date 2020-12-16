@@ -59,13 +59,16 @@
             android:padding="20dp">
 
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/friendCard"
                 android:layout_width="0dp"
                 android:layout_height="125dp"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:background="@drawable/black_border"
                 app:cardBackgroundColor="@color/yellow"
-                app:cardElevation="10dp">
+                app:cardElevation="10dp"
+                android:clickable="true"
+                android:focusable="true">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -104,13 +107,16 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/requestCard"
                 android:layout_width="0dp"
                 android:layout_height="125dp"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:background="@drawable/black_border"
                 app:cardBackgroundColor="@color/yellow"
-                app:cardElevation="10dp">
+                app:cardElevation="10dp"
+                android:clickable="true"
+                android:focusable="true">
 
                 <RelativeLayout
                     android:layout_width="match_parent"

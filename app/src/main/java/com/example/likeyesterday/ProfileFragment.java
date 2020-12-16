@@ -3,6 +3,7 @@ package com.example.likeyesterday;
 
 import android.os.Bundle;
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -28,6 +29,8 @@ public class ProfileFragment extends Fragment {
     Button update;
     TextView fullNameProfile,usernameProfile,friendsLabel,requestsLabel;
     TextInputLayout emailID,fullName,phoneNumber;
+    CardView friendCard,requestcard;
+
     private Boolean fullNameChange,emailChange,phoneNoChange;
 
     public FirebaseFirestore db= FirebaseFirestore.getInstance();
@@ -49,6 +52,8 @@ public class ProfileFragment extends Fragment {
         fullName=root.findViewById(R.id.fullNameProf);
         emailID=root.findViewById(R.id.emailIDProfile);
         phoneNumber=root.findViewById(R.id.phoneNumberProfile);
+        friendCard=root.findViewById(R.id.friendCard);
+        requestcard=root.findViewById(R.id.requestCard);
 
 
 //        uid=getActivity().getIntent().getStringExtra("uid");
@@ -83,6 +88,20 @@ public class ProfileFragment extends Fragment {
                         Toast.makeText(getActivity(),"profile couldn't load",Toast.LENGTH_SHORT).show();
                     }
                 });
+
+        friendCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getFragmentManager().beginTransaction().replace(R.id.fragment_container,new FriendsListFragment()).commit();
+            }
+        });
+
+        requestcard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getFragmentManager().beginTransaction().replace(R.id.fragment_container,new RequestListFragment()).commit();
+            }
+        });
 
         fullName.getEditText().addTextChangedListener(new TextWatcher() {
             @Override

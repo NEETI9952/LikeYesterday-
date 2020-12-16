@@ -7,11 +7,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-
+import androidx.fragment.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.WindowManager;
@@ -20,6 +21,8 @@ import android.widget.Toast;
 import com.example.likeyesterday.LoginSignup.StartActivity;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+
+import static com.example.likeyesterday.LoginSignup.LoginWithEmail.mAuth;
 
 public class HomeScreenActivity2 extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
@@ -44,11 +47,27 @@ public class HomeScreenActivity2 extends AppCompatActivity implements Navigation
         toggle.syncState();
 
         if(savedInstanceState==null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new ProfileFragment()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new ProfileFragment()).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
             navigationview.setCheckedItem(R.id.nav_profile);
         }
 
 
+    }
+
+    private boolean doubleBackToExitPressedOnce;
+    private Handler mHandler = new Handler();
+
+    private final Runnable mRunnable = new Runnable() {
+        @Override
+        public void run() {
+            doubleBackToExitPressedOnce = false;
+        }
+    };
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mHandler != null) { mHandler.removeCallbacks(mRunnable); }
     }
 
     @Override
@@ -57,7 +76,19 @@ public class HomeScreenActivity2 extends AppCompatActivity implements Navigation
             drawer.closeDrawer(GravityCompat.START);
         }
         else {
-            super.onBackPressed();
+
+//            if(getSupportFragmentManager().findFragmentById(R.id.fragment_container).getParentFragment()==R.layout.fragment_profile){
+            if (doubleBackToExitPressedOnce) {
+                    this.finishAffinity();
+                    return;
+            }
+
+            this.doubleBackToExitPressedOnce = true;
+            Toast.makeText(this, "Please press back again to exit", Toast.LENGTH_SHORT).show();
+
+            mHandler.postDelayed(mRunnable, 2000);
+
+
         }
     }
 
@@ -69,11 +100,11 @@ public class HomeScreenActivity2 extends AppCompatActivity implements Navigation
 //                startActivity(intent);
                 break;
             case R.id.nav_friends:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new FriendsListFragment()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new FriendsListFragment()).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
 
                 break;
             case R.id.nav_my_places:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new MyPlacesMapsFragment()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new MyPlacesMapsFragment()).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
                 break;
             case R.id.nav_email_us:
                 Intent emailIntent= new Intent(Intent.ACTION_SEND);
@@ -91,7 +122,7 @@ public class HomeScreenActivity2 extends AppCompatActivity implements Navigation
 //                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new music_library()).commit();
                 break;
             case R.id.nav_profile:
-                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new ProfileFragment()).commit();
+                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new ProfileFragment()).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
                 break;
             case R.id.nav_logout:
                 new AlertDialog.Builder(this)
@@ -105,6 +136,7 @@ public class HomeScreenActivity2 extends AppCompatActivity implements Navigation
                                 FirebaseAuth.getInstance().signOut();
                                 Intent intent= new Intent(HomeScreenActivity2.this,StartActivity.class);
                                 Log.i("Item selected","Log out");
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(intent);
 
                             }
