@@ -1,8 +1,10 @@
-package com.example.likeyesterday;
+package com.example.likeyesterday.MyFriends;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -20,30 +22,27 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.likeyesterday.FirestoreRecyclerModelClass;
+import com.example.likeyesterday.R;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+
+import static com.example.likeyesterday.ProfileFragment.currentUserDocumentReference;
+import static com.example.likeyesterday.ProfileFragment.uid;
 
 public class FriendsListFragment extends Fragment {
 
     public static final int PERMISSIONS_REQUEST_READ_CONTACTS = 1;
     FloatingActionButton add;
 
-    public static String friendUid;
-
-    public static FirebaseFirestore db= FirebaseFirestore.getInstance();
-
-    public static CollectionReference userColRef=db.collection("Users");
+    public static String friendUid="";
+    public static String friendName;
 
     private RecyclerView recyclerView;
-    private FriendsFirestoreAdapter  friendsFirestoreAdapter;
+    private FriendsFirestoreAdapter friendsFirestoreAdapter;
 
-    public static FirebaseAuth mAuth;
-    public static String uid;
-
+//    public static String uid;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -54,20 +53,17 @@ public class FriendsListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-//        return inflater.inflate(R.layout.fragment_friends_list, container, false);
         ViewGroup root=(ViewGroup) inflater.inflate(R.layout.fragment_friends_list, container, false);
-
-        mAuth = FirebaseAuth.getInstance();
-        uid = mAuth.getCurrentUser().getUid();
 
         recyclerView=root.findViewById(R.id.recyclerRequests);
 
-        add=(FloatingActionButton) root.findViewById(R.id.addFriendButton);
+        add=root.findViewById(R.id.addFriendButton);
+
+
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 requestContactPermission();
-
             }
         });
 
@@ -77,9 +73,8 @@ public class FriendsListFragment extends Fragment {
 
     private void setRecyclerView() {
 
-        Query query=userColRef.document(uid).collection("FriendsList").orderBy("FullName", Query.Direction.ASCENDING);
+        Query query=currentUserDocumentReference.collection("FriendsList");
 
-        Log.i("Friend List",uid);
 
         FirestoreRecyclerOptions<FirestoreRecyclerModelClass> options=new FirestoreRecyclerOptions.Builder<FirestoreRecyclerModelClass>().setQuery(query,FirestoreRecyclerModelClass.class).build();
         friendsFirestoreAdapter=new FriendsFirestoreAdapter(getContext(),options);
@@ -98,7 +93,6 @@ public class FriendsListFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-
         friendsFirestoreAdapter.stopListening();
     }
 
@@ -122,14 +116,21 @@ public class FriendsListFragment extends Fragment {
                     ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.READ_CONTACTS}, PERMISSIONS_REQUEST_READ_CONTACTS);
                 }
             } else {
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, new AddFriendsFragment()).addToBackStack(null);
-                transaction.commit();
+                Intent intent= new Intent(getActivity(), AddFriendsClass.class);
+                startActivity(intent);
+                ((Activity) getActivity()).overridePendingTransition(0, 0);
+//                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+//                transaction.replace(R.id.fragment_container, new AddFriendsFragment()).addToBackStack(null);
+//                transaction.commit();
             }
         } else {
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            transaction.replace(R.id.fragment_container, new AddFriendsFragment()).addToBackStack(null);
-            transaction.commit();
+//            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+//            transaction.replace(R.id.fragment_container, new AddFriendsFragment()).addToBackStack(null);
+//            transaction.commit();
+            Intent intent= new Intent(getActivity(),AddFriendsClass.class);
+            startActivity(intent);
+            ((Activity) getActivity()).overridePendingTransition(0, 0);
+
         }
     }
 
@@ -144,7 +145,6 @@ public class FriendsListFragment extends Fragment {
                 } else {
                     Toast.makeText(getContext(), "You have disabled a contacts permission", Toast.LENGTH_LONG).show();
                 }
-                return;
             }
         }
     }

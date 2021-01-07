@@ -1,6 +1,7 @@
-package com.example.likeyesterday;
+package com.example.likeyesterday.MyFriends;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,34 +16,29 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.likeyesterday.FirestoreRecyclerModelClass;
+import com.example.likeyesterday.R;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.example.likeyesterday.FriendsListFragment.friendUid;
+import static com.example.likeyesterday.MyFriends.FriendsListFragment.friendName;
+import static com.example.likeyesterday.MyFriends.FriendsListFragment.friendUid;
+import static com.example.likeyesterday.ProfileFragment.currentUserDocumentReference;
+import static com.example.likeyesterday.ProfileFragment.db;
 
 public class FriendsFirestoreAdapter extends FirestoreRecyclerAdapter<FirestoreRecyclerModelClass,FriendsFirestoreAdapter.FriendsVH> {
 
-    FirebaseFirestore db= FirebaseFirestore.getInstance();
-    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    String uid = user.getUid();
     Context context;
-    String currentUserName;
-    String currentUserPhoneNumber;
 
     public FriendsFirestoreAdapter(Context context,@NonNull FirestoreRecyclerOptions<FirestoreRecyclerModelClass> options) {
         super(options);
@@ -61,9 +57,12 @@ public class FriendsFirestoreAdapter extends FirestoreRecyclerAdapter<FirestoreR
             @Override
             public void onClick(View view) {
                 friendUid=String.valueOf(firestoreRecyclerModelClass.getFriendUid());
+                friendName=String.valueOf(firestoreRecyclerModelClass.getFullName());
+
+
                 Log.i("friendid","friendid "+friendUid );
 
-                DocumentReference oldDocID = db.collection("Users").document(uid).collection("FriendsList").document(friendUid);
+                DocumentReference oldDocID = currentUserDocumentReference.collection("FriendsList").document(friendUid);
                 oldDocID.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -71,13 +70,21 @@ public class FriendsFirestoreAdapter extends FirestoreRecyclerAdapter<FirestoreR
                             DocumentSnapshot documentOld=task.getResult();
 
                             if (documentOld.exists()){
-                                FragmentManager fragmentManager=((AppCompatActivity)context).getSupportFragmentManager();
-                                fragmentManager.beginTransaction().replace(R.id.fragment_container,new FriendFragment()).commit();
+                                FriendFragment fragmentFriend= new FriendFragment();
+//                                Bundle args = new Bundle();
+//                                args.putString("friendUid",friendUid);
+//                                args.putString("friendName",friendName);
+//                                Log.i("friend","friendName "+friendName);
+//                                fragmentFriend.setArguments(args);
+//                                String backStateName = ((AppCompatActivity)context).getSupportFragmentManager().ge.getClass().getName();
+                                Intent intent=new Intent(context,FriendActivity.class);
+                                context.startActivity(intent);
+//                                FragmentManager fragmentManager=((AppCompatActivity)context).getSupportFragmentManager();
+//                                fragmentManager.beginTransaction().replace(R.id.fragment_container,new FriendFragment()).addToBackStack(null).commit();
 
                             }else {
 
                                 DocumentReference docID = db.collection("Users").document(friendUid);
-
                                 docID.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                     @Override
                                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -92,26 +99,23 @@ public class FriendsFirestoreAdapter extends FirestoreRecyclerAdapter<FirestoreR
                                                 friend.put("FullName", friendFullName);
                                                 friend.put("PhoneNumber", friendPhoneNumber);
 
-                                                CollectionReference friendListReference = db.collection("Users").document(uid).collection("FriendsList");
-
+                                                CollectionReference friendListReference = currentUserDocumentReference.collection("FriendsList");
                                                 friendListReference.document(friendUid).set(friend).addOnSuccessListener(new OnSuccessListener<Void>() {
                                                     @Override
                                                     public void onSuccess(Void aVoid) {
-                                                        DocumentReference currentUserDocumentReference = db.collection("Users").document(uid);
                                                         currentUserDocumentReference.get()
                                                                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                                                     @Override
                                                                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                                                                         if (documentSnapshot.exists()) {
 
-                                                                            int noOfFriends = Integer.parseInt(documentSnapshot.get("Number of friends").toString());
-                                                                            currentUserDocumentReference.update("Number of friends", noOfFriends + 1);
-                                                                            int noOfRequests = Integer.parseInt(documentSnapshot.get("Number of requests").toString());
-                                                                            currentUserDocumentReference.update("Number of requests", noOfRequests - 1);
+//                                                                            int noOfFriends = Integer.parseInt(documentSnapshot.get("Number of friends").toString());
+//                                                                            currentUserDocumentReference.update("Number of friends", noOfFriends + 1);
+//                                                                            int noOfRequests = Integer.parseInt(documentSnapshot.get("Number of requests").toString());
+//                                                                            currentUserDocumentReference.update("Number of requests", noOfRequests - 1);
 
-                                                                            CollectionReference requestListReference = db.collection("Users").document(uid).collection("Request List");
+                                                                            CollectionReference requestListReference = currentUserDocumentReference.collection("Request List");
                                                                             requestListReference.document(friendUid).delete();
-
                                                                             Toast.makeText(context, "User added to your friend list", Toast.LENGTH_SHORT).show();
                                                                         }
                                                                     }
@@ -125,9 +129,7 @@ public class FriendsFirestoreAdapter extends FirestoreRecyclerAdapter<FirestoreR
                                                                 });
                                                     }
                                                 });
-
                                             }
-
                                         }
                                     }
                                 });
@@ -139,17 +141,13 @@ public class FriendsFirestoreAdapter extends FirestoreRecyclerAdapter<FirestoreR
                 });
             }
         });
-
     }
 
     @NonNull
     @Override
     public FriendsFirestoreAdapter.FriendsVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
         View v;
-
         v = LayoutInflater.from(parent.getContext()).inflate(R.layout.friendslistitem, parent, false);
-//            return new workOrderVH(v);
         return new FriendsVH(v);
     }
 

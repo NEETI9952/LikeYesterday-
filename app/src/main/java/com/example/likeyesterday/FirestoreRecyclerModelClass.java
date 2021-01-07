@@ -1,11 +1,34 @@
 package com.example.likeyesterday;
 
 
+import com.google.firebase.firestore.GeoPoint;
+
 public class FirestoreRecyclerModelClass {
 
     private String FullName;
     private String PhoneNumber;
     private String friendUid;
+    private String PlaceName;
+    private GeoPoint geopoint;
+    private String description;
+    private int NoOfTimes;
+    private String Date;
+    private String Time;
+
+    public FirestoreRecyclerModelClass(){
+    }
+
+    public FirestoreRecyclerModelClass(String fullName, String friendUid, String PhoneNumber, String PlaceName,GeoPoint geopoint,String description,int NoOfTimes,String Date,String Time) {
+        this.friendUid = friendUid;
+        this.FullName = fullName;
+        this.PhoneNumber = PhoneNumber;
+        this.geopoint = geopoint;
+        this.PlaceName = PlaceName;
+        this.description = description;
+        this.NoOfTimes=NoOfTimes;
+        this.Date=Date;
+        this.Time=Time;
+    }
 
     public String getFriendUid() {
         return friendUid;
@@ -15,9 +38,6 @@ public class FirestoreRecyclerModelClass {
         this.friendUid = friendUid;
     }
 
-    public FirestoreRecyclerModelClass(){
-
-    }
 
     public String getFullName() {
         return FullName;
@@ -27,11 +47,9 @@ public class FirestoreRecyclerModelClass {
         this.FullName = fullName;
     }
 
-    public FirestoreRecyclerModelClass(String fullName,String friendUid,String PhoneNumber) {
-        this.friendUid = friendUid;
-        this.FullName = fullName;
-        this.PhoneNumber = PhoneNumber;
-    }
+    public String getPlaceName() { return PlaceName; }
+
+    public void setPlaceName(String placeName) { this.PlaceName = placeName; }
 
     public String getPhoneNumber() {
         return PhoneNumber;
@@ -40,4 +58,41 @@ public class FirestoreRecyclerModelClass {
     public void setPhoneNumber(String PhoneNumber) {
         this.PhoneNumber = PhoneNumber;
     }
+
+    public GeoPoint getgeopoint() {
+        return geopoint;
+    }
+
+    public void setgeopoint(GeoPoint geopoint) {
+        this.geopoint = geopoint;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public int getNoOfTimes() { return NoOfTimes; }
+
+    public void setNoOfTimes(int noOfTimes) { NoOfTimes = noOfTimes; }
+
+    public String getDate() {
+        return Date;
+    }
+
+    public void setDate(String date) {
+        Date = date;
+    }
+
+    public String getTime() {
+        return Time;
+    }
+
+    public void setTime(String time) {
+        Time = time;
+    }
+
 }

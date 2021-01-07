@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layout_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/etDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:hint="Date"
+        android:paddingLeft="10dp"
+        android:paddingTop="20dp"/>
+    <TextView
+        android:id="@+id/etTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:hint="Time"
+        android:paddingRight="10dp"
+        android:paddingTop="20dp"/>
+
+    <EditText
+        android:id="@+id/etTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etDate"
+        android:hint="Place"
+        android:paddingTop="20dp"/>
+
+
+    <EditText
+        android:id="@+id/etSnippet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/etTitle"
+        android:hint="Description"/>
+
+
+    <ImageView
+        android:layout_marginTop="100dp"
+        android:id="@+id/etImageView"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_centerInParent="true"
+        android:layout_above="@id/floatingActionButton"
+        app:srcCompat="@drawable/black_border" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:foreground="@drawable/ic_baseline_add_24"
+        android:backgroundTint="@color/yellow"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:focusable="true"
+        android:contentDescription="Add picture" />
+
+
+</RelativeLayout>

@@ -1,11 +1,10 @@
-package com.example.likeyesterday;
+package com.example.likeyesterday.MyFriends;
 
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -13,29 +12,27 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.likeyesterday.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.protobuf.StringValue;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.example.likeyesterday.ProfileFragment.currentUserDocumentReference;
+import static com.example.likeyesterday.ProfileFragment.db;
+import static com.example.likeyesterday.ProfileFragment.uid;
+
 public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.UserListViewHolder> {
 
     ArrayList<UserObject> userList;
     Context context;
-    FirebaseFirestore db= FirebaseFirestore.getInstance();
-    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    String uid = user.getUid();
     String currentUserName;
     String currentUserPhoneNumber;
 
@@ -84,7 +81,7 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.UserLi
                 @Override
                 public void onClick(View v) {
 
-                    CollectionReference friendListReference = db.collection("Users").document(uid).collection("FriendsList");
+                    CollectionReference friendListReference = currentUserDocumentReference.collection("FriendsList");
                     friendListReference
                             .whereEqualTo("PhoneNumber",phoneTextView.getText().toString())
                             .get()
@@ -98,6 +95,7 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.UserLi
                                         Log.d("friend","User Already in your friend list");
                                     }
                                     if(queryDocumentSnapshots.size()==0 ){
+
                                         CollectionReference userCollectionReference = db.collection("Users");
                                         userCollectionReference
                                                 .whereEqualTo("Phone Number",phoneTextView.getText().toString())
@@ -116,21 +114,21 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.UserLi
                                                             friend.put("FullName",friendFullName);
                                                             friend.put("PhoneNumber",friendPhoneNumber);
 
+
                                                             friendListReference.document(friendDocID).set(friend).addOnSuccessListener(new OnSuccessListener<Void>() {
                                                                 @Override
                                                                 public void onSuccess(Void aVoid) {
-                                                                    DocumentReference currentUserDocumentReference = db.collection("Users").document(uid);
+
 
                                                                     currentUserDocumentReference.get()
                                                                             .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                                                                 @Override
                                                                                 public void onSuccess(DocumentSnapshot documentSnapshot) {
                                                                                     if(documentSnapshot.exists()){
-
                                                                                         currentUserName=documentSnapshot.get("Full Name").toString();
                                                                                         currentUserPhoneNumber=documentSnapshot.get("Phone Number").toString();
-                                                                                        int noOfFriends=Integer.parseInt(documentSnapshot.get("Number of friends").toString());
-                                                                                        currentUserDocumentReference.update("Number of friends",noOfFriends+1 );
+//                                                                                        int noOfFriends=Integer.parseInt(documentSnapshot.get("Number of friends").toString());
+//                                                                                        currentUserDocumentReference.update("Number of friends",noOfFriends+1 );
                                                                                     }
 
                                                                                     DocumentReference friendDocumentReference = db.collection("Users").document(friendDocID);
@@ -139,8 +137,8 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.UserLi
                                                                                                 @Override
                                                                                                 public void onSuccess(DocumentSnapshot documentSnapshot) {
                                                                                                     if(documentSnapshot.exists()){
-                                                                                                        int noOfRequests=Integer.parseInt(documentSnapshot.get("Number of requests").toString());
-                                                                                                        friendDocumentReference.update("Number of requests",noOfRequests+1 );
+//                                                                                                        int noOfRequests=Integer.parseInt(documentSnapshot.get("Number of requests").toString());
+//                                                                                                        friendDocumentReference.update("Number of requests",noOfRequests+1 );
 
                                                                                                         CollectionReference requestListReference = friendDocumentReference.collection("Request List");
 
@@ -149,6 +147,7 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.UserLi
                                                                                                         request.put("PhoneNumber",currentUserPhoneNumber);
 
                                                                                                         requestListReference.document(uid).set(request);
+
                                                                                                         Toast.makeText(context,"User added to your friend list",Toast.LENGTH_SHORT).show();
                                                                                                         notifyDataSetChanged();
                                                                                                         notifyItemRemoved(getAdapterPosition());
@@ -201,9 +200,6 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.UserLi
                                     Log.d("friend",e.toString());
                                 }
                             });
-
-
-
 
 
                 }

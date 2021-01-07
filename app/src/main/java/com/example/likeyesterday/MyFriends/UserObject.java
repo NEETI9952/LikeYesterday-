@@ -1,4 +1,4 @@
-package com.example.likeyesterday;
+package com.example.likeyesterday.MyFriends;
 
 public class UserObject {
 

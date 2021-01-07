@@ -19,10 +19,10 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.example.likeyesterday.LoginSignup.StartActivity;
+import com.example.likeyesterday.MyFriends.FriendsListFragment;
+import com.example.likeyesterday.MyPlaces.MyPlacesClass;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
-
-import static com.example.likeyesterday.LoginSignup.LoginWithEmail.mAuth;
 
 public class HomeScreenActivity2 extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
@@ -50,8 +50,6 @@ public class HomeScreenActivity2 extends AppCompatActivity implements Navigation
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new ProfileFragment()).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
             navigationview.setCheckedItem(R.id.nav_profile);
         }
-
-
     }
 
     private boolean doubleBackToExitPressedOnce;
@@ -104,7 +102,9 @@ public class HomeScreenActivity2 extends AppCompatActivity implements Navigation
 
                 break;
             case R.id.nav_my_places:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new MyPlacesMapsFragment()).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
+//                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new MyPlacesMapsFragment()).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
+                Intent intent= new Intent(this, MyPlacesClass.class);
+                startActivity(intent);
                 break;
             case R.id.nav_email_us:
                 Intent emailIntent= new Intent(Intent.ACTION_SEND);

@@ -1,42 +1,28 @@
-package com.example.likeyesterday;
+package com.example.likeyesterday.MyFriends;
 
-import android.annotation.TargetApi;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.likeyesterday.FirestoreRecyclerModelClass;
+import com.example.likeyesterday.MyFriends.FriendsFirestoreAdapter;
+import com.example.likeyesterday.R;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+
+import static com.example.likeyesterday.ProfileFragment.currentUserDocumentReference;
 
 public class RequestListFragment extends Fragment {
 
-    public static String friendUid;
-
-    public static FirebaseFirestore db= FirebaseFirestore.getInstance();
-
-    public static CollectionReference userColRef=db.collection("Users");
-
     private RecyclerView recyclerView;
-    private FriendsFirestoreAdapter  friendsFirestoreAdapter;
+    private FriendsFirestoreAdapter friendsFirestoreAdapter;
 
     public static FirebaseAuth mAuth;
     public static String uid;
@@ -65,7 +51,7 @@ public class RequestListFragment extends Fragment {
 
     private void setRecyclerView() {
 
-        Query query=userColRef.document(uid).collection("Request List").orderBy("FullName", Query.Direction.ASCENDING);
+        Query query=currentUserDocumentReference.collection("Request List").orderBy("FullName", Query.Direction.ASCENDING);
 
         Log.i("Request List",uid);
 

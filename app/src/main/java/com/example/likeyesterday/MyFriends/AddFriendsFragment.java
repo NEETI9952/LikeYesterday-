@@ -1,4 +1,4 @@
-package com.example.likeyesterday;
+package com.example.likeyesterday.MyFriends;
 
 import android.database.Cursor;
 import android.os.Bundle;
@@ -16,21 +16,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.likeyesterday.CountryToPhonePrefix;
+import com.example.likeyesterday.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
 import static android.content.Context.TELEPHONY_SERVICE;
+import static com.example.likeyesterday.ProfileFragment.currentUserDocumentReference;
+import static com.example.likeyesterday.ProfileFragment.db;
 
 
 public class AddFriendsFragment extends Fragment {
@@ -40,11 +39,6 @@ public class AddFriendsFragment extends Fragment {
     private RecyclerView.LayoutManager userListLayoutManager;
 
     ArrayList<UserObject> userList,contactList;
-
-    FirebaseFirestore db= FirebaseFirestore.getInstance();
-    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    String uid = user.getUid();
-
     String phoneNumberCurrentUser;
 
     @Override
@@ -124,7 +118,6 @@ public class AddFriendsFragment extends Fragment {
                                     }
                                 }
 
-                            DocumentReference currentUserDocumentReference = db.collection("Users").document(uid);
                             currentUserDocumentReference.get()
                                     .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                         @Override
@@ -135,7 +128,7 @@ public class AddFriendsFragment extends Fragment {
                                         }
                                     });
 
-                            CollectionReference friendListReference = db.collection("Users").document(uid).collection("FriendsList");
+                            CollectionReference friendListReference = currentUserDocumentReference.collection("FriendsList");
                             friendListReference
                                     .whereEqualTo("PhoneNumber",mContact.getPhone())
                                     .get()
@@ -146,7 +139,6 @@ public class AddFriendsFragment extends Fragment {
                                                 userList.add(user);
                                                 userListAdapter.notifyDataSetChanged();
                                             }
-
                                         }
                                     })
                                     .addOnFailureListener(new OnFailureListener() {
