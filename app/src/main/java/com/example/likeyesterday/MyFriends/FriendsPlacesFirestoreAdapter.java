@@ -40,6 +40,7 @@ public class FriendsPlacesFirestoreAdapter extends FirestoreRecyclerAdapter<Fire
 
         friendsVH.placeNameTV.setText(firestoreRecyclerModelClass.getPlaceName());
 
+
         friendsVH.constraintLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -71,12 +72,19 @@ public class FriendsPlacesFirestoreAdapter extends FirestoreRecyclerAdapter<Fire
         CardView cardView;
         ConstraintLayout constraintLayout;
 
+
         public FriendsVH(@NonNull View itemView) {
             super(itemView);
             placeNameTV=itemView.findViewById(R.id.placeNameTextViewPlaceList);
             cardView=itemView.findViewById(R.id.cardView);
             constraintLayout=itemView.findViewById(R.id.constraintLayout);
+            Log.i("tesingcount","asdfasdfas"+String.valueOf(getItemCount()));
 
         }
+    }
+
+    @Override
+    public int getItemCount() {
+        return super.getItemCount();
     }
 }

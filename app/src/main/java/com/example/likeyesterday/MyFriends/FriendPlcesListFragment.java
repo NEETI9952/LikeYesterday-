@@ -2,21 +2,29 @@ package com.example.likeyesterday.MyFriends;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.likeyesterday.FirestoreRecyclerModelClass;
-import com.example.likeyesterday.MyPlaces.MyPacesFirestoreAdapter;
 import com.example.likeyesterday.R;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
@@ -33,6 +41,7 @@ public class FriendPlcesListFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private FriendsPlacesFirestoreAdapter friendsPlacesFirestoreAdapter;
+    int count;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,13 +59,21 @@ public class FriendPlcesListFragment extends Fragment {
     }
 
     private void setRecyclerView() {
-        Query query=currentUserDocumentReference.collection("FriendsList").document(friendUid).collection("Our Places");
+        Query query= (Query) currentUserDocumentReference.collection("FriendsList").document(friendUid).collection("Our Places");
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    Log.i("testingCountofplaces","no of places="+task.getResult().size());
+            }
+        });
         FirestoreRecyclerOptions<FirestoreRecyclerModelClass> options=new FirestoreRecyclerOptions.Builder<FirestoreRecyclerModelClass>().setQuery(query,FirestoreRecyclerModelClass.class).build();
         friendsPlacesFirestoreAdapter=new FriendsPlacesFirestoreAdapter(getContext(),options);
+
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(friendsPlacesFirestoreAdapter);
+        Log.i("tesingcount",String.valueOf(friendsPlacesFirestoreAdapter.getItemCount()));
     }
 
     @Override

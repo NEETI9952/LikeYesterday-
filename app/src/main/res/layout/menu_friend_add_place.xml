@@ -33,12 +33,13 @@
         android:paddingTop="20dp"/>
 
     <ImageView
-        android:layout_marginTop="100dp"
         android:id="@+id/etImageView"
         android:layout_width="200dp"
         android:layout_height="200dp"
-        android:layout_centerInParent="true"
         android:layout_above="@id/floatingActionButton"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="100dp"
+        android:scaleType="fitXY"
         app:srcCompat="@drawable/black_border" />
 
     <EditText

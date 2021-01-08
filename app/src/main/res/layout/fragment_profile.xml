@@ -21,19 +21,20 @@
                 android:id="@+id/profilePicture"
                 android:layout_width="100dp"
                 android:layout_height="121dp"
-                android:paddingTop="20dp"
-                android:layout_centerVertical="true"
+                android:layout_centerVertical="false"
+                android:paddingBottom="20dp"
                 android:src="@drawable/ic_round_account_circle_24" />
 
             <TextView
                 android:id="@+id/fullNameProfile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
+                android:layout_centerVertical="false"
                 android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@+id/profilePicture"
+                android:paddingTop="25sp"
                 android:textColor="@color/black"
-                android:textSize="32sp"
+                android:textSize="28sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -41,7 +42,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/fullNameProfile"
-                android:layout_centerVertical="true"
+                android:layout_centerVertical="false"
                 android:layout_marginLeft="10dp"
                 android:layout_marginBottom="20dp"
                 android:layout_toRightOf="@+id/profilePicture"

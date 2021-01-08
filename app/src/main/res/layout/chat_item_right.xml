@@ -13,9 +13,10 @@
 
         <ImageView
             android:id="@+id/chatImageView"
-            android:layout_height="300dp"
             android:layout_width="300dp"
-            android:background="@drawable/black_border" />
+            android:layout_height="300dp"
+            android:background="@drawable/black_border"
+            android:scaleType="fitXY" />
 
         <TextView
             android:id="@+id/chatDescription"
