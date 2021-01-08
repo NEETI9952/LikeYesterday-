@@ -32,7 +32,7 @@
                 android:layout_centerVertical="false"
                 android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@+id/profilePicture"
-                android:paddingTop="25sp"
+                android:paddingTop="15sp"
                 android:textColor="@color/black"
                 android:textSize="28sp"
                 android:textStyle="bold" />
@@ -47,6 +47,7 @@
                 android:layout_marginBottom="20dp"
                 android:layout_toRightOf="@+id/profilePicture"
                 android:fontFamily="sans-serif"
+                android:paddingStart="3sp"
                 android:textColor="#595555"
                 android:textSize="20sp" />
 

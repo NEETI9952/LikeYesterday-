@@ -5,7 +5,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,8 +17,11 @@ import com.example.likeyesterday.FirestoreRecyclerModelClass;
 import com.example.likeyesterday.MyFriends.FriendsFirestoreAdapter;
 import com.example.likeyesterday.R;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import static com.example.likeyesterday.ProfileFragment.currentUserDocumentReference;
 
@@ -26,6 +32,8 @@ public class RequestListFragment extends Fragment {
 
     public static FirebaseAuth mAuth;
     public static String uid;
+    private ProgressBar progressBar;
+    private ImageView emptyListIV;
 
 
     @Override
@@ -44,6 +52,8 @@ public class RequestListFragment extends Fragment {
         uid = mAuth.getCurrentUser().getUid();
 
         recyclerView=root.findViewById(R.id.recyclerRequests);
+        emptyListIV=root.findViewById(R.id.imageViewRequestsListEmpty);
+        progressBar=root.findViewById(R.id.progressBarRequestsList);
 
         setRecyclerView();
         return  root;
@@ -53,6 +63,17 @@ public class RequestListFragment extends Fragment {
 
         Query query=currentUserDocumentReference.collection("Request List").orderBy("FullName", Query.Direction.ASCENDING);
         Log.i("Request List",uid);
+        progressBar.setVisibility(View.INVISIBLE);
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                Log.i("testingCountof","Request="+task.getResult().size());
+                if(task.getResult().isEmpty()){
+                    emptyListIV.setImageResource(R.drawable.undraw_empty_xct9);
+                    emptyListIV.setVisibility(View.VISIBLE);
+                }
+            }
+        });
 
         FirestoreRecyclerOptions<FirestoreRecyclerModelClass> options=new FirestoreRecyclerOptions.Builder<FirestoreRecyclerModelClass>().setQuery(query,FirestoreRecyclerModelClass.class).build();
         friendsFirestoreAdapter=new FriendsFirestoreAdapter(getContext(),options);

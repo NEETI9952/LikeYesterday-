@@ -141,6 +141,7 @@ public class HomeScreenActivity2 extends AppCompatActivity implements Navigation
                                 FirebaseAuth.getInstance().signOut();
                                 Intent intent= new Intent(HomeScreenActivity2.this,StartActivity.class);
                                 Log.i("Item selected","Log out");
+
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(intent);
 
