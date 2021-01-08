@@ -54,9 +54,7 @@ public class FriendsListFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         ViewGroup root=(ViewGroup) inflater.inflate(R.layout.fragment_friends_list, container, false);
-
         recyclerView=root.findViewById(R.id.recyclerRequests);
-
         add=root.findViewById(R.id.addFriendButton);
 
 
@@ -74,11 +72,8 @@ public class FriendsListFragment extends Fragment {
     private void setRecyclerView() {
 
         Query query=currentUserDocumentReference.collection("FriendsList");
-
-
         FirestoreRecyclerOptions<FirestoreRecyclerModelClass> options=new FirestoreRecyclerOptions.Builder<FirestoreRecyclerModelClass>().setQuery(query,FirestoreRecyclerModelClass.class).build();
         friendsFirestoreAdapter=new FriendsFirestoreAdapter(getContext(),options);
-
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(friendsFirestoreAdapter);
@@ -102,7 +97,14 @@ public class FriendsListFragment extends Fragment {
                 if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), android.Manifest.permission.READ_CONTACTS)) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     builder.setTitle("Read Contacts permission");
-                    builder.setPositiveButton(android.R.string.ok, null);
+                    builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent= new Intent(getActivity(), AddFriendsClass.class);
+                            startActivity(intent);
+                            ((Activity) getActivity()).overridePendingTransition(0, 0);
+                        }
+                    });
                     builder.setMessage("Please enable access to contacts.");
                     builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
                         @TargetApi(Build.VERSION_CODES.M)
@@ -139,9 +141,12 @@ public class FriendsListFragment extends Fragment {
         switch (requestCode) {
             case PERMISSIONS_REQUEST_READ_CONTACTS: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                    transaction.replace(R.id.fragment_container,new AddFriendsFragment()).addToBackStack(null);
-                    transaction.commit();
+//                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
+//                    transaction.replace(R.id.fragment_container,new AddFriendsFragment()).addToBackStack(null);
+//                    transaction.commit();
+                    Intent intent= new Intent(getActivity(), AddFriendsClass.class);
+                    startActivity(intent);
+                    ((Activity) getActivity()).overridePendingTransition(0, 0);
                 } else {
                     Toast.makeText(getContext(), "You have disabled a contacts permission", Toast.LENGTH_LONG).show();
                 }

@@ -71,6 +71,7 @@ public class MyPlacesMapsFragment extends Fragment{
 
     public void goToMap(Location location,String title,String snippet){
         if(location!=null){
+            mMap.clear();
             LatLng userLocation= new LatLng(location.getLatitude(),location.getLongitude());
 //            BitmapDescriptor customMarker = BitmapDescriptorFactory.fromResource(R.drawable.mapspin);
 //            customMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW);
@@ -293,9 +294,11 @@ public class MyPlacesMapsFragment extends Fragment{
 
         if(mMap!=null){
             mMap.clear();
-            mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+            mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
             mMap.setOnMapLongClickListener((GoogleMap.OnMapLongClickListener) this);
-            mMap.setOnMarkerClickListener((GoogleMap.OnMarkerClickListener) this);
+            mMap.getUiSettings().setRotateGesturesEnabled(true);
+            mMap.getUiSettings().setZoomGesturesEnabled(true);
+            mMap.getUiSettings().setZoomControlsEnabled(true);
         }
     }
 

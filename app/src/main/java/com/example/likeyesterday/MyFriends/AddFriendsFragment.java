@@ -14,6 +14,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.likeyesterday.CountryToPhonePrefix;
@@ -37,6 +39,8 @@ public class AddFriendsFragment extends Fragment {
     private RecyclerView userListRecyclerView;
     private RecyclerView.Adapter userListAdapter;
     private RecyclerView.LayoutManager userListLayoutManager;
+    ProgressBar progressBar;
+    ImageView emptyListIV;
 
     ArrayList<UserObject> userList,contactList;
     String phoneNumberCurrentUser;
@@ -53,12 +57,24 @@ public class AddFriendsFragment extends Fragment {
         ViewGroup root=(ViewGroup) inflater.inflate(R.layout.fragment_add_friends, container, false);
         // Inflate the layout for this fragment
         userListRecyclerView= root.findViewById(R.id.userList);
+        progressBar=root.findViewById(R.id.progressBarAddFriends);
+        emptyListIV=root.findViewById(R.id.imageViewAddFriendEmpty);
 
         contactList=new ArrayList<>();
         userList=new ArrayList<>();
 
         initializeRecyclerView();
-        getContactList();
+
+        currentUserDocumentReference.get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            phoneNumberCurrentUser=documentSnapshot.get("Phone Number").toString();
+                            getContactList();
+                        }
+                    }
+                });
         return root;
     }
 
@@ -84,6 +100,12 @@ public class AddFriendsFragment extends Fragment {
             contactList.add(mContact);
             getUserDetails(mContact);
         }
+        progressBar.setVisibility(View.INVISIBLE);
+        if(userList.isEmpty()){
+            emptyListIV.setImageResource(R.drawable.undraw_empty_xct9);
+            emptyListIV.setVisibility(View.VISIBLE);
+        }
+
     }
 
     private void initializeRecyclerView() {
@@ -103,8 +125,6 @@ public class AddFriendsFragment extends Fragment {
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-
-
                         for(QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
 
                             String phoneNumber=documentSnapshot.get("Phone Number").toString();
@@ -118,16 +138,6 @@ public class AddFriendsFragment extends Fragment {
                                     }
                                 }
 
-                            currentUserDocumentReference.get()
-                                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                        @Override
-                                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                            if (documentSnapshot.exists()) {
-                                                phoneNumberCurrentUser=documentSnapshot.get("Phone Number").toString();
-                                            }
-                                        }
-                                    });
-
                             CollectionReference friendListReference = currentUserDocumentReference.collection("FriendsList");
                             friendListReference
                                     .whereEqualTo("PhoneNumber",mContact.getPhone())
@@ -135,6 +145,7 @@ public class AddFriendsFragment extends Fragment {
                                     .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                                         @Override
                                         public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+//                                            progressBar.setVisibility(View.INVISIBLE);
                                             if(queryDocumentSnapshots.size()==0 && !mContact.getPhone().equals(phoneNumberCurrentUser)) {
                                                 userList.add(user);
                                                 userListAdapter.notifyDataSetChanged();

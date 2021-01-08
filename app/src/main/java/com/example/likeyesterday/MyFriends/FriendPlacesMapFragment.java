@@ -94,7 +94,6 @@ public class FriendPlacesMapFragment extends Fragment {
     String finalAddress;
     Map<String,Object> myPlace;
     ImageView imageView;
-    Uri selectedImage;
     String currentPhotoPath;
     ProgressBar p1;
     private String imageUrl;
@@ -103,6 +102,7 @@ public class FriendPlacesMapFragment extends Fragment {
 
     public void goToMap(Location location, String title,String snippet){
         if(location!=null){
+            mMap.clear();
             LatLng userLocation= new LatLng(location.getLatitude(),location.getLongitude());
 //            BitmapDescriptor customMarker = BitmapDescriptorFactory.fromResource(R.drawable.mapspin);
 //            customMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW);
@@ -137,7 +137,6 @@ public class FriendPlacesMapFragment extends Fragment {
 //                } else {
 //                    Toast.makeText(getContext(), "You have disabled a required permission", Toast.LENGTH_LONG).show();
 //                }
-
         }
     }
 
@@ -260,7 +259,6 @@ public class FriendPlacesMapFragment extends Fragment {
 
                 }
             };
-
             if(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED){
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,locationListener);
 
@@ -538,7 +536,7 @@ public class FriendPlacesMapFragment extends Fragment {
         MaterialAlertDialogBuilder builder=new MaterialAlertDialogBuilder(getContext());
         builder.setIcon(R.drawable.addimage);
 //                builder.setBackground(getResources().getDrawable(R.drawable.alertdiabogbg,null));
-        builder.setMessage("Choose source...").setPositiveButton("Camera", new DialogInterface.OnClickListener() {
+        builder.setMessage("Choose image source...").setPositiveButton("Camera", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 cameraPermission();
@@ -548,7 +546,6 @@ public class FriendPlacesMapFragment extends Fragment {
             public void onClick(DialogInterface dialog, int which) {
                 Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(gallery, GALLERY_REQUEST_CODE);
-
             }
         });
         builder.show();
@@ -642,10 +639,6 @@ public class FriendPlacesMapFragment extends Fragment {
 
                                                                     }
                                                                 });
-
-
-
-
                                                     }
                                                 });
                                             }
@@ -683,7 +676,6 @@ public class FriendPlacesMapFragment extends Fragment {
                         }
                     }
                 });
-
         TextView textViewDateAdd = alertDialogg.findViewById(R.id.etDateAdd);
         TextView textViewTimeAdd = alertDialogg.findViewById(R.id.etTimeAdd);
         SimpleDateFormat sdfAdd = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
@@ -723,7 +715,6 @@ public class FriendPlacesMapFragment extends Fragment {
             if (resultCode == Activity.RESULT_OK) {
 
                 File f = new File(currentPhotoPath);
-
 //                Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
                 Uri contentUri = Uri.fromFile(f);
 //                mediaScanIntent.setData(contentUri);
@@ -747,12 +738,10 @@ public class FriendPlacesMapFragment extends Fragment {
                 String imageFileName = "JPEG_" + timeStamp + "." + getFileExt(contentUri);
                 Log.d("testimage", "onActivityResult: Gallery Image Uri:  " + imageFileName);
 //                selectedImageFront.setImageURI(Uri.fromFile(f));
-
 //                        Log.i("testimageupload", Uri.fromFile(f).toString());
 //                issueImage.setImageURI(contentUri);
 //                issueImage.setTag("uploaded");
                 uploadImageToFirebase(imageFileName,contentUri);
-
             }}
     }
 
@@ -762,12 +751,12 @@ public class FriendPlacesMapFragment extends Fragment {
             if(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED){
                 dispatchTakePictureIntent();
             }
-
         } else {
             Log.i("testimageupload", "2");
             dispatchTakePictureIntent();
         }
     }
+
 
     private void dispatchTakePictureIntent () {
         Log.i("testimageupload", "3");
@@ -801,7 +790,6 @@ public class FriendPlacesMapFragment extends Fragment {
     private String getFileExt(Uri contentUri) {
 //        private String getFileExt(Uri contentUri) {
         ContentResolver c = getActivity().getContentResolver();
-
         MimeTypeMap mime = MimeTypeMap.getSingleton();
         return mime.getExtensionFromMimeType(c.getType(contentUri));
 //        }
@@ -854,13 +842,12 @@ public class FriendPlacesMapFragment extends Fragment {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-
                 Log.i("testimageupload", "image not uploaded to firebase storage");
                 Log.i("testimageupload", "Dow: "+ e);
             }
         });
-
     }
+
 
     public void LoadImage(){
         try {
@@ -868,12 +855,10 @@ public class FriendPlacesMapFragment extends Fragment {
                 @Override
                 public void onSuccess() {
                     p1.setVisibility(View.GONE);
-
                 }
 
                 @Override
                 public void onError(Exception e) {
-
                 }
             });
         }catch(Exception e){
