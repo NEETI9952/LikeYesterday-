@@ -23,17 +23,14 @@ public class MyPlacesListFragment extends Fragment {
     public static String PlaceName;
     public static GeoPoint geopoint;
 
-    static ArrayList<String> places = new ArrayList<String>();
-    static ArrayList<LatLng> locations = new ArrayList<LatLng>();
-
     private RecyclerView recyclerView;
     private MyPacesFirestoreAdapter placesFirestoreAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,8 +44,8 @@ public class MyPlacesListFragment extends Fragment {
 
     }
 
-    private void setRecyclerView() {
 
+    private void setRecyclerView() {
         Query query=currentUserDocumentReference.collection("My Places");
 
         FirestoreRecyclerOptions<FirestoreRecyclerModelClass> options=new FirestoreRecyclerOptions.Builder<FirestoreRecyclerModelClass>().setQuery(query,FirestoreRecyclerModelClass.class).build();

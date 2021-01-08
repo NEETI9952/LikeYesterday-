@@ -52,7 +52,6 @@ public class RequestListFragment extends Fragment {
     private void setRecyclerView() {
 
         Query query=currentUserDocumentReference.collection("Request List").orderBy("FullName", Query.Direction.ASCENDING);
-
         Log.i("Request List",uid);
 
         FirestoreRecyclerOptions<FirestoreRecyclerModelClass> options=new FirestoreRecyclerOptions.Builder<FirestoreRecyclerModelClass>().setQuery(query,FirestoreRecyclerModelClass.class).build();
