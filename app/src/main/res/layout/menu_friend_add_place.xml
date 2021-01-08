@@ -32,15 +32,6 @@
         android:hint="Place"
         android:paddingTop="20dp"/>
 
-
-    <EditText
-        android:id="@+id/etSnippet"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/etTitle"
-        android:hint="Description"/>
-
-
     <ImageView
         android:layout_marginTop="100dp"
         android:id="@+id/etImageView"
@@ -49,6 +40,16 @@
         android:layout_centerInParent="true"
         android:layout_above="@id/floatingActionButton"
         app:srcCompat="@drawable/black_border" />
+
+    <EditText
+        android:id="@+id/etSnippet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/floatingActionButton"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:hint="Description"
+        android:paddingLeft="10dp" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButton"
@@ -61,6 +62,14 @@
         android:layout_alignParentEnd="true"
         android:focusable="true"
         android:contentDescription="Add picture" />
+
+    <ProgressBar
+        android:id="@+id/progressBar2"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_above="@id/floatingActionButton"/>
 
 
 </RelativeLayout>

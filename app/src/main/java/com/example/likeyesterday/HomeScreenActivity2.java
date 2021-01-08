@@ -23,9 +23,14 @@ import com.example.likeyesterday.MyFriends.FriendsListFragment;
 import com.example.likeyesterday.MyPlaces.MyPlacesClass;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.storage.StorageReference;
 
 public class HomeScreenActivity2 extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
+    public static final int CAMERA_PERM_CODE = 101;
+    public static final int CAMERA_REQUEST_CODE = 102;
+    public static final int GALLERY_REQUEST_CODE = 105;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

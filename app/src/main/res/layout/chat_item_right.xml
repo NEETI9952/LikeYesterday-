@@ -13,21 +13,40 @@
 
         <ImageView
             android:id="@+id/chatImageView"
-            android:layout_width="300dp"
-            android:layout_margin="8dp"
             android:layout_height="300dp"
+            android:layout_width="300dp"
             android:background="@drawable/black_border" />
 
         <TextView
             android:id="@+id/chatDescription"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:paddingBottom="8dp"
             android:textSize="18sp"
             android:textColor="@color/black"
             android:layout_marginLeft="10dp"
             android:layout_below="@+id/chatImageView"
             android:text="our first trip"/>
+
+        <TextView
+            android:id="@+id/chatDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="10sp"
+            android:textColor="@color/black"
+            android:paddingHorizontal="10dp"
+            android:layout_below="@+id/chatDescription"
+            android:text="date"/>
+
+        <TextView
+            android:id="@+id/chatTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="10sp"
+            android:paddingHorizontal="10dp"
+            android:textColor="@color/black"
+            android:layout_below="@+id/chatDescription"
+            android:layout_alignParentEnd="true"
+            android:text="time"/>
 
     </RelativeLayout>
 

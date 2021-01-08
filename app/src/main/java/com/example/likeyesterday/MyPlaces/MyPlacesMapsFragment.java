@@ -75,8 +75,8 @@ public class MyPlacesMapsFragment extends Fragment{
 //            BitmapDescriptor customMarker = BitmapDescriptorFactory.fromResource(R.drawable.mapspin);
 //            customMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW);
             mMap.addMarker(new MarkerOptions().position(userLocation).title(title).icon(customMarker).snippet(snippet));
-            mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation,12));
+//            mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation,10));
         }
     }
 
@@ -132,8 +132,6 @@ public class MyPlacesMapsFragment extends Fragment{
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-//
-                    
                     finalAddress = address;
                     showAlertDialogForPoint(latLng);
                 }
@@ -194,7 +192,6 @@ public class MyPlacesMapsFragment extends Fragment{
                                                                         }
                                                                     });
                                                         }
-
                                                     }
                                                 }).addOnFailureListener(new OnFailureListener() {
                                             @Override
@@ -202,7 +199,6 @@ public class MyPlacesMapsFragment extends Fragment{
                                                 Toast.makeText(getContext(),"Something went wrong \n Please try again",Toast.LENGTH_SHORT).show();
                                             }
                                         });
-
                                     }
                                 }).setNegativeButton("No", new DialogInterface.OnClickListener() {
                             @Override
@@ -230,6 +226,11 @@ public class MyPlacesMapsFragment extends Fragment{
                 public void onLocationChanged(@NonNull Location location) {
                     customMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE);
                     goToMap(location,"your location","");
+                }
+
+                @Override
+                public void onStatusChanged(String provider, int status, Bundle extras) {
+
                 }
             };
 
@@ -292,7 +293,7 @@ public class MyPlacesMapsFragment extends Fragment{
 
         if(mMap!=null){
             mMap.clear();
-            mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+            mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
             mMap.setOnMapLongClickListener((GoogleMap.OnMapLongClickListener) this);
             mMap.setOnMarkerClickListener((GoogleMap.OnMarkerClickListener) this);
         }
@@ -335,8 +336,6 @@ public class MyPlacesMapsFragment extends Fragment{
                         myPlacesCollection.document().set(myPlace).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                customMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE);
-
                                 myPlacesCollection
                                         .whereEqualTo("geopoint",placeGeopoint)
                                         .get()
@@ -355,6 +354,7 @@ public class MyPlacesMapsFragment extends Fragment{
                                                     myPlacesCollection.document(myPlaceDocID).collection("PlaceInfo").document().set(myPlaceInfo).addOnSuccessListener(new OnSuccessListener<Void>() {
                                                         @Override
                                                         public void onSuccess(Void aVoid) {
+                                                            customMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE);
                                                             mMap.addMarker(new MarkerOptions().position(point).title(placeNameEditText).icon(customMarker).snippet("1"));
                                                             Toast.makeText(getContext(),"Location Added",Toast.LENGTH_SHORT).show();
 

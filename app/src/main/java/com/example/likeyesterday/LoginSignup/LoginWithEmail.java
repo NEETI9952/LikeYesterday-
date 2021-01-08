@@ -120,6 +120,26 @@ public class LoginWithEmail extends AppCompatActivity {
         }
     }
 
+    public void forgetPassword(View view){
+        if(!emailID.getEditText().getText().toString().trim().isEmpty()){
+
+            mAuth.sendPasswordResetEmail(emailID.getEditText().getText().toString().trim())
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(LoginWithEmail.this, "Email has been successfully sent", LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(LoginWithEmail.this, "Something went wrong. Please check your emailID", LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+        }else{
+            Toast.makeText(LoginWithEmail.this, "Please enter email address", LENGTH_SHORT).show();
+        }
+
+    }
+
 
     @Override
     public void onBackPressed() {

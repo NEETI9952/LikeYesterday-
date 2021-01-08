@@ -97,13 +97,16 @@
                     android:layout_height="wrap_content"
                     android:buttonTint="@color/black"
                     android:text="Remember Me"
-                    android:textColor="@color/black" />
+                    android:visibility="invisible"
+                    android:textColor="@color/black"
+                    />
 
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="35dp"
                     android:textAllCaps="false"
+                    android:onClick="forgetPassword"
                     android:background="#00000000"
                     android:textColor="@color/black"
                     android:text="Forgot Password" />

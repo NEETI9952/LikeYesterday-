@@ -65,6 +65,14 @@
         android:layout_above="@id/floatingActionButtonAdd"
         app:srcCompat="@drawable/black_border" />
 
+    <ProgressBar
+        android:id="@+id/progressBar3"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_above="@id/floatingActionButtonAdd"/>
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButtonAdd"
         android:layout_width="wrap_content"

@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.likeyesterday.R;
 
 import java.util.List;
@@ -47,10 +48,10 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull FeedAdapter.ViewHolder holder, int position) {
         FeedItem feedItem= feedlist.get(position);
         holder.descriptionTV.setText(feedItem.getDescription());
+        Glide.with(context).load(feedItem.getImage()).into(holder.imageView);
+        holder.dateTV.setText(feedItem.getDate());
+        holder.timeTV.setText(feedItem.getTime());
         Log.i("recyclertest","test: "+feedItem.getDescription());
-//        Bitmap bitmap= BitmapFactory.decodeFile(feedItem.getImage().getPath(),new BitmapFactory.Options());
-//        holder.imageView.setImageBitmap(bitmap);
-//        holder.imageView.setImageURI(Uri.parse(feedItem.getImage()));
 
     }
 
@@ -65,13 +66,15 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView descriptionTV;
+        public TextView descriptionTV,dateTV,timeTV;
         public ImageView imageView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             descriptionTV=itemView.findViewById(R.id.chatDescription);
             imageView=itemView.findViewById(R.id.chatImageView);
+            dateTV=itemView.findViewById(R.id.chatDate);
+            timeTV=itemView.findViewById(R.id.chatTime);
         }
     }
 
