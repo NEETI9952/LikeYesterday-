@@ -5,12 +5,18 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentTransaction;
+
+import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -25,6 +31,8 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.StorageReference;
 
+import java.security.Permissions;
+
 public class HomeScreenActivity2 extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
     public static final int CAMERA_PERM_CODE = 101;
@@ -37,6 +45,12 @@ public class HomeScreenActivity2 extends AppCompatActivity implements Navigation
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen2);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        int Permission_All=1;
+        String[] Permissions = {Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_CONTACTS,Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE };
+        if(!hasPermissions(this, Permissions)){
+            ActivityCompat.requestPermissions(HomeScreenActivity2.this, Permissions, Permission_All);
+        }
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -55,6 +69,7 @@ public class HomeScreenActivity2 extends AppCompatActivity implements Navigation
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new ProfileFragment()).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
             navigationview.setCheckedItem(R.id.nav_profile);
         }
+
     }
 
     private boolean doubleBackToExitPressedOnce;
@@ -154,4 +169,20 @@ public class HomeScreenActivity2 extends AppCompatActivity implements Navigation
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    public static boolean hasPermissions(Context context, String... permissions){
+        Log.i("testingpermission","reached");
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M&& context!=null&&permissions!=null){
+            for(String permission: permissions){
+                Log.i("testingpermission","reached3");
+                if(ActivityCompat.checkSelfPermission(context, permission)!= PackageManager.PERMISSION_GRANTED){
+
+                    Log.i("testingpermission","reached5");
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
 }

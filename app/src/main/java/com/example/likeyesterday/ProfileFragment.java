@@ -1,12 +1,18 @@
 package com.example.likeyesterday;
 
 
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,6 +65,9 @@ public class ProfileFragment extends Fragment {
         phoneNumber=root.findViewById(R.id.phoneNumberProfile);
         friendCard=root.findViewById(R.id.friendCard);
         requestCard=root.findViewById(R.id.requestCard);
+
+
+
 
 
 
@@ -261,4 +270,6 @@ public class ProfileFragment extends Fragment {
         });
         return root;
     }
+
+
 }
