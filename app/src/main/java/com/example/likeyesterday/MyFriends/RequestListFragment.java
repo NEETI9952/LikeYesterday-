@@ -22,6 +22,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import static com.example.likeyesterday.MyFriends.FriendsListFragment.progressBar;
+import static com.example.likeyesterday.MyFriends.FriendsListFragment.emptyListIV;
 
 import static com.example.likeyesterday.ProfileFragment.currentUserDocumentReference;
 
@@ -32,8 +34,7 @@ public class RequestListFragment extends Fragment {
 
     public static FirebaseAuth mAuth;
     public static String uid;
-    private ProgressBar progressBar;
-    private ImageView emptyListIV;
+
 
 
     @Override
@@ -53,6 +54,7 @@ public class RequestListFragment extends Fragment {
 
         recyclerView=root.findViewById(R.id.recyclerRequests);
         emptyListIV=root.findViewById(R.id.imageViewRequestsListEmpty);
+        emptyListIV.setImageResource(R.drawable.undraw_empty_xct9);
         progressBar=root.findViewById(R.id.progressBarRequestsList);
 
         setRecyclerView();
@@ -63,13 +65,14 @@ public class RequestListFragment extends Fragment {
 
         Query query=currentUserDocumentReference.collection("Request List").orderBy("FullName", Query.Direction.ASCENDING);
         Log.i("Request List",uid);
-        progressBar.setVisibility(View.INVISIBLE);
+
         query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 Log.i("testingCountof","Request="+task.getResult().size());
                 if(task.getResult().isEmpty()){
-                    emptyListIV.setImageResource(R.drawable.undraw_empty_xct9);
+                    progressBar.setVisibility(View.INVISIBLE);
+
                     emptyListIV.setVisibility(View.VISIBLE);
                 }
             }
@@ -94,6 +97,13 @@ public class RequestListFragment extends Fragment {
         super.onStop();
 
         friendsFirestoreAdapter.stopListening();
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        progressBar=getView().findViewById(R.id.progressBarRequestsList);
+        progressBar.setVisibility(View.VISIBLE);
+        Log.i("testinglifecycle","reached ran Onresume");
     }
 
 

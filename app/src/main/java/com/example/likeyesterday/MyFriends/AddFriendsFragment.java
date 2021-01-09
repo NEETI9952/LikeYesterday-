@@ -28,6 +28,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import static android.content.Context.TELEPHONY_SERVICE;
 import static android.view.View.VISIBLE;
@@ -187,7 +188,7 @@ public class AddFriendsFragment extends Fragment {
 
     private String getCountryISO(){
         String iso=null;
-        TelephonyManager telephonyManager= (TelephonyManager) getContext().getSystemService(TELEPHONY_SERVICE);
+        TelephonyManager telephonyManager= (TelephonyManager) Objects.requireNonNull(getContext()).getSystemService(TELEPHONY_SERVICE);
         if(telephonyManager.getNetworkCountryIso()!=null){
             if (telephonyManager.getNetworkCountryIso().equals("")){
                 iso=telephonyManager.getNetworkCountryIso();

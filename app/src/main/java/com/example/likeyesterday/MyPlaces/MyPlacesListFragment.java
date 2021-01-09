@@ -25,7 +25,11 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+
+
 import static com.example.likeyesterday.ProfileFragment.currentUserDocumentReference;
+import static com.example.likeyesterday.MyFriends.FriendsListFragment.progressBar;
+import static com.example.likeyesterday.MyFriends.FriendsListFragment.emptyListIV;
 
 
 public class MyPlacesListFragment extends Fragment {
@@ -35,8 +39,7 @@ public class MyPlacesListFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private MyPacesFirestoreAdapter placesFirestoreAdapter;
-    private ProgressBar progressBar;
-    private ImageView emptyListIV;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,6 +54,7 @@ public class MyPlacesListFragment extends Fragment {
         ViewGroup root=(ViewGroup) inflater.inflate(R.layout.fragment_my_places_list, container, false);
         recyclerView=root.findViewById(R.id.placesList);
         emptyListIV=root.findViewById(R.id.imageViewMyPlacesListEmpty);
+        emptyListIV.setImageResource(R.drawable.undraw_empty_xct9);
         progressBar=root.findViewById(R.id.progressBarMyPlacesList);
 
         setRecyclerView();
@@ -61,13 +65,13 @@ public class MyPlacesListFragment extends Fragment {
 
     private void setRecyclerView() {
         Query query=currentUserDocumentReference.collection("My Places");
-        progressBar.setVisibility(View.INVISIBLE);
+
         query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 Log.i("testingCountof","no of places="+task.getResult().size());
                 if(task.getResult().isEmpty()){
-                    emptyListIV.setImageResource(R.drawable.undraw_empty_xct9);
+                    progressBar.setVisibility(View.INVISIBLE);
                     emptyListIV.setVisibility(View.VISIBLE);
                 }
             }
@@ -91,5 +95,12 @@ public class MyPlacesListFragment extends Fragment {
     public void onStop() {
         super.onStop();
        placesFirestoreAdapter.stopListening();
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        progressBar=getView().findViewById(R.id.progressBarMyPlacesList);
+        progressBar.setVisibility(View.VISIBLE);
+        Log.i("testinglifecycle","reached ran Onresume");
     }
 }

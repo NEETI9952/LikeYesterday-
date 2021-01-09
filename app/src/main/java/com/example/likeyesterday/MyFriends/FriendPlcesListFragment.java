@@ -32,6 +32,8 @@ import java.util.ArrayList;
 
 import static com.example.likeyesterday.MyFriends.FriendsListFragment.friendUid;
 import static com.example.likeyesterday.ProfileFragment.currentUserDocumentReference;
+import static com.example.likeyesterday.MyFriends.FriendsListFragment.progressBar;
+import static com.example.likeyesterday.MyFriends.FriendsListFragment.emptyListIV;
 
 public class FriendPlcesListFragment extends Fragment {
 
@@ -44,8 +46,7 @@ public class FriendPlcesListFragment extends Fragment {
     private RecyclerView recyclerView;
     private FriendsPlacesFirestoreAdapter friendsPlacesFirestoreAdapter;
     int count;
-    private ProgressBar progressBar;
-    private ImageView emptyListIV;
+
     private Query query;
 
     @Override
@@ -60,8 +61,18 @@ public class FriendPlcesListFragment extends Fragment {
         ViewGroup root=(ViewGroup)inflater.inflate(R.layout.fragment_friend_plces_list, container, false);
         recyclerView=root.findViewById(R.id.placesList);
         emptyListIV=root.findViewById(R.id.imageViewAddFriendsPlacesListEmpty);
+        emptyListIV.setImageResource(R.drawable.undraw_empty_xct9);
         progressBar=root.findViewById(R.id.progressBarFriendsPlacesList);
-         query= (Query) currentUserDocumentReference.collection("FriendsList").document(friendUid).collection("Our Places");
+
+        setRecyclerView();
+
+
+        return root;
+    }
+
+    private void setRecyclerView() {
+
+       Query query= (Query) currentUserDocumentReference.collection("FriendsList").document(friendUid).collection("Our Places");
 
         query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -69,20 +80,10 @@ public class FriendPlcesListFragment extends Fragment {
                 Log.i("testingCountof","no of places="+task.getResult().size());
                 if(task.getResult().isEmpty()){
                     progressBar.setVisibility(View.INVISIBLE);
-                    emptyListIV.setImageResource(R.drawable.undraw_empty_xct9);
                     emptyListIV.setVisibility(View.VISIBLE);
-                }else{
-                    progressBar.setVisibility(View.INVISIBLE);
-                    setRecyclerView();
                 }
             }
         });
-
-
-        return root;
-    }
-
-    private void setRecyclerView() {
 
 
         FirestoreRecyclerOptions<FirestoreRecyclerModelClass> options=new FirestoreRecyclerOptions.Builder<FirestoreRecyclerModelClass>().setQuery(query,FirestoreRecyclerModelClass.class).build();
@@ -96,10 +97,7 @@ public class FriendPlcesListFragment extends Fragment {
 
     }
 
-    private void SetFirestoreRecyler(){
 
-
-    }
 
     @Override
     public void onStart() {
@@ -111,5 +109,12 @@ public class FriendPlcesListFragment extends Fragment {
     public void onStop() {
         super.onStop();
         friendsPlacesFirestoreAdapter.stopListening();
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        progressBar=getView().findViewById(R.id.progressBarFriendsPlacesList);
+        progressBar.setVisibility(View.VISIBLE);
+        Log.i("testinglifecycle","reached ran Onresume");
     }
 }

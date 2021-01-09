@@ -21,6 +21,8 @@ import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import static com.example.likeyesterday.MyFriends.FriendsListFragment.hideProgressbar;
+import static com.example.likeyesterday.MyFriends.FriendsListFragment.showProgressbar;
 import static com.example.likeyesterday.MyPlaces.MyPlacesListFragment.PlaceName;
 import static com.example.likeyesterday.MyPlaces.MyPlacesListFragment.geopoint;
 
@@ -86,5 +88,18 @@ public class FriendsPlacesFirestoreAdapter extends FirestoreRecyclerAdapter<Fire
     @Override
     public int getItemCount() {
         return super.getItemCount();
+    }
+
+    @Override
+    public void onDataChanged() {
+        super.onDataChanged();
+        Log.i("testinglifecycle","reached ran");
+
+        if(getItemCount()>=1){
+            hideProgressbar();
+        }
+        else{
+            showProgressbar();
+        }
     }
 }

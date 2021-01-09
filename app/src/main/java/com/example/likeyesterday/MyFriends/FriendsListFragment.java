@@ -135,8 +135,19 @@ public class FriendsListFragment extends Fragment {
     public void onStart() {
         super.onStart();
 //        if(nonEmptyRecycler==true) {
+//        progressBar.setVisibility(View.VISIBLE);
             friendsFirestoreAdapter.startListening();
+
+
 //        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        progressBar=getView().findViewById(R.id.progressBarFriendsList);
+        progressBar.setVisibility(View.VISIBLE);
+        Log.i("testinglifecycle","reached ran Onresume");
     }
 
     @Override
@@ -144,6 +155,7 @@ public class FriendsListFragment extends Fragment {
         super.onStop();
 
         friendsFirestoreAdapter.stopListening();
+        Log.i("testinglifecycle","reached ran stop");
 
     }
 
