@@ -210,7 +210,7 @@ public class FriendsListFragment extends Fragment {
         }
     }
 
-    public static void hideProgressbar(){
+    public static void hideProgressbar() {
         progressBar.setVisibility(View.INVISIBLE);
         emptyListIV.setVisibility(View.INVISIBLE);
     }
