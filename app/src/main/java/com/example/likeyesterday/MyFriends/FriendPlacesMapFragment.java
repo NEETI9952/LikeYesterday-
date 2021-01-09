@@ -103,6 +103,7 @@ public class FriendPlacesMapFragment extends Fragment {
     public void goToMap(Location location, String title,String snippet){
         if(location!=null){
             mMap.clear();
+            addOldPlaces();
             LatLng userLocation= new LatLng(location.getLatitude(),location.getLongitude());
 //            BitmapDescriptor customMarker = BitmapDescriptorFactory.fromResource(R.drawable.mapspin);
 //            customMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW);
@@ -110,7 +111,9 @@ public class FriendPlacesMapFragment extends Fragment {
                 mMap.addMarker(new MarkerOptions().position(userLocation).title(title).icon(customMarker).snippet(snippet));
                 mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation,15));
-            }catch (Exception e){}
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
     }
 //    public void addPhoto(){
@@ -118,6 +121,7 @@ public class FriendPlacesMapFragment extends Fragment {
 //        startActivityForResult(intent,1);
 //        Log.i("Image","add photo");
 //    }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -176,7 +180,6 @@ public class FriendPlacesMapFragment extends Fragment {
                                 }
                                 Log.i("Address", address);
                             }
-
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -256,9 +259,9 @@ public class FriendPlacesMapFragment extends Fragment {
 
                 @Override
                 public void onStatusChanged(String provider, int status, Bundle extras) {
-
                 }
             };
+
             if(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED){
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,locationListener);
 
@@ -270,33 +273,35 @@ public class FriendPlacesMapFragment extends Fragment {
                 ActivityCompat.requestPermissions(Objects.requireNonNull(getActivity()),new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
             }
 
-            friendPlacesCollection.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                @Override
-                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+            addOldPlaces();
 
-                    for(QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
-                        FirestoreRecyclerModelClass map= documentSnapshot.toObject(FirestoreRecyclerModelClass.class);
-                        String PlaceName=map.getPlaceName();
-                        GeoPoint geopoint=map.getgeopoint();
-                        String times=Integer.toString(map.getNoOfTimes());
-
-//                        Location placeLocation= new Location(LocationManager.GPS_PROVIDER);
-//                        placeLocation.setLatitude(geopoint.getLatitude());
-//                        placeLocation.setLongitude(geopoint.getLongitude());
-                        LatLng placeLocation=new LatLng(geopoint.getLatitude(),geopoint.getLongitude());
-
-                        customMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW);
-                        mMap.addMarker(new MarkerOptions().position(placeLocation).title(PlaceName).icon(customMarker).snippet(times));
-//                        goToMap(placeLocation,PlaceName,"");
-                    }
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(getContext(),"Something went wrong "+ e.toString(),Toast.LENGTH_SHORT).show();
-
-                }
-            });
+//            friendPlacesCollection.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+//                @Override
+//                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+//
+//                    for(QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+//                        FirestoreRecyclerModelClass map= documentSnapshot.toObject(FirestoreRecyclerModelClass.class);
+//                        String PlaceName=map.getPlaceName();
+//                        GeoPoint geopoint=map.getgeopoint();
+//                        String times=Integer.toString(map.getNoOfTimes());
+//
+////                        Location placeLocation= new Location(LocationManager.GPS_PROVIDER);
+////                        placeLocation.setLatitude(geopoint.getLatitude());
+////                        placeLocation.setLongitude(geopoint.getLongitude());
+//                        LatLng placeLocation=new LatLng(geopoint.getLatitude(),geopoint.getLongitude());
+//
+//                        customMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW);
+//                        mMap.addMarker(new MarkerOptions().position(placeLocation).title(PlaceName).icon(customMarker).snippet(times));
+////                        goToMap(placeLocation,PlaceName,"");
+//                    }
+//                }
+//            }).addOnFailureListener(new OnFailureListener() {
+//                @Override
+//                public void onFailure(@NonNull Exception e) {
+//                    Toast.makeText(getContext(),"Something went wrong "+ e.toString(),Toast.LENGTH_SHORT).show();
+//
+//                }
+//            });
         }
     };
 
@@ -329,6 +334,38 @@ public class FriendPlacesMapFragment extends Fragment {
             mMap.getUiSettings().setZoomControlsEnabled(true);
         }}catch (Exception e){}
     }
+
+//    -----------------------------
+    public void addOldPlaces(){
+        friendPlacesCollection.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+
+                for(QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                    FirestoreRecyclerModelClass map= documentSnapshot.toObject(FirestoreRecyclerModelClass.class);
+                    String PlaceName=map.getPlaceName();
+                    GeoPoint geopoint=map.getgeopoint();
+                    String times=Integer.toString(map.getNoOfTimes());
+
+//                        Location placeLocation= new Location(LocationManager.GPS_PROVIDER);
+//                        placeLocation.setLatitude(geopoint.getLatitude());
+//                        placeLocation.setLongitude(geopoint.getLongitude());
+                    LatLng placeLocation=new LatLng(geopoint.getLatitude(),geopoint.getLongitude());
+
+                    customMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW);
+                    mMap.addMarker(new MarkerOptions().position(placeLocation).title(PlaceName).icon(customMarker).snippet(times));
+//                        goToMap(placeLocation,PlaceName,"");
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getContext(),"Something went wrong "+ e.toString(),Toast.LENGTH_SHORT).show();
+
+            }
+        });
+    }
+//        -----------------------------
 
     private void showAlertDialogForPoint(final LatLng point) {
         // inflate message_item.xml view

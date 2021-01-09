@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CountryToPhonePrefix {
+
     public static String getPhone(String code) {
         return country2phone.get(code.toUpperCase());
     }

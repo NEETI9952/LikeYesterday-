@@ -30,6 +30,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 
 import static android.content.Context.TELEPHONY_SERVICE;
+import static android.view.View.VISIBLE;
 import static com.example.likeyesterday.ProfileFragment.currentUserDocumentReference;
 import static com.example.likeyesterday.ProfileFragment.db;
 
@@ -38,7 +39,6 @@ public class AddFriendsFragment extends Fragment {
 
     private RecyclerView userListRecyclerView;
     private RecyclerView.Adapter userListAdapter;
-    private RecyclerView.LayoutManager userListLayoutManager;
     ProgressBar progressBar;
     ImageView emptyListIV;
 
@@ -48,7 +48,6 @@ public class AddFriendsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -75,14 +74,23 @@ public class AddFriendsFragment extends Fragment {
                         }
                     }
                 });
+
         return root;
+    }
+
+    private void initializeRecyclerView() {
+        userListRecyclerView.setNestedScrollingEnabled(false);
+        userListRecyclerView.setHasFixedSize(false);
+        RecyclerView.LayoutManager userListLayoutManager = new LinearLayoutManager(getContext());
+        userListRecyclerView.setLayoutManager(userListLayoutManager);
+        userListAdapter=new UserListAdapter(getContext(),userList);
+        userListRecyclerView.setAdapter(userListAdapter);
     }
 
     private void getContactList() {
         String ISOPrefix = getCountryISO();
 
-        Cursor phones = getContext().getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, ContactsContract.Contacts.Entity.RAW_CONTACT_ID +
-                " ASC");
+        Cursor phones = getContext().getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, ContactsContract.Contacts.Entity.RAW_CONTACT_ID + " ASC");
 
         while(phones.moveToNext()){
             String name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
@@ -100,85 +108,96 @@ public class AddFriendsFragment extends Fragment {
             contactList.add(mContact);
             getUserDetails(mContact);
         }
-        progressBar.setVisibility(View.INVISIBLE);
+
         if(userList.isEmpty()){
+            progressBar.setVisibility(View.INVISIBLE);
             emptyListIV.setImageResource(R.drawable.undraw_empty_xct9);
-            emptyListIV.setVisibility(View.VISIBLE);
+            emptyListIV.setVisibility(VISIBLE);
         }
 
     }
 
-    private void initializeRecyclerView() {
-        userListRecyclerView.setNestedScrollingEnabled(false);
-        userListRecyclerView.setHasFixedSize(false);
-        userListLayoutManager = new LinearLayoutManager(getContext());
-        userListRecyclerView.setLayoutManager(userListLayoutManager);
-        userListAdapter=new UserListAdapter(getContext(),userList);
-        userListRecyclerView.setAdapter(userListAdapter);
-    }
-
     private void getUserDetails(UserObject mContact){
-        CollectionReference userCollectionReference = db.collection("Users");
-        userCollectionReference
-                .whereEqualTo("Phone Number",mContact.getPhone())
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for(QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
 
-                            String phoneNumber=documentSnapshot.get("Phone Number").toString();
-                            String name= documentSnapshot.get("Full Name").toString();
+        if(!mContact.getPhone().equals(phoneNumberCurrentUser)) {
+            CollectionReference userCollectionReference = db.collection("Users");
+            userCollectionReference
+                    .whereEqualTo("Phone Number",mContact.getPhone())
+                    .get()
+                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
 
-                            UserObject user=new UserObject(name,phoneNumber);
-                            if (name.equals(phoneNumber))
-                                for(UserObject mContactIterator : contactList){
-                                    if(mContactIterator.getPhone().equals(user.getPhone())){
-                                        user.setName(mContactIterator.getName());
+                            for(QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+
+                                String phoneNumber=documentSnapshot.get("Phone Number").toString();
+                                String name= documentSnapshot.get("Full Name").toString();
+
+                                UserObject user=new UserObject(name,phoneNumber);
+                                if (name.equals(phoneNumber))
+                                    for(UserObject mContactIterator : contactList){
+                                        if(mContactIterator.getPhone().equals(user.getPhone())){
+                                            user.setName(mContactIterator.getName());
+                                        }
                                     }
-                                }
 
-                            CollectionReference friendListReference = currentUserDocumentReference.collection("FriendsList");
-                            friendListReference
-                                    .whereEqualTo("PhoneNumber",mContact.getPhone())
-                                    .get()
-                                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                                        @Override
-                                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                CollectionReference friendListReference = currentUserDocumentReference.collection("FriendsList");
+                                friendListReference
+                                        .whereEqualTo("PhoneNumber",mContact.getPhone())
+                                        .get()
+                                        .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                            @Override
+                                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
 //                                            progressBar.setVisibility(View.INVISIBLE);
-                                            if(queryDocumentSnapshots.size()==0 && !mContact.getPhone().equals(phoneNumberCurrentUser)) {
-                                                userList.add(user);
-                                                userListAdapter.notifyDataSetChanged();
+                                                if(queryDocumentSnapshots.size()==0) {
+                                                    if(!userList.contains(user)){
+                                                        userList.add(user);
+                                                        userListAdapter.notifyDataSetChanged();
+                                                    }
+
+                                                    if(userList.size()>0){
+                                                        if(emptyListIV.getVisibility()==VISIBLE){
+                                                            emptyListIV.setVisibility(View.INVISIBLE);
+                                                        }
+                                                    }
+
+                                                }
                                             }
-                                        }
-                                    })
-                                    .addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            Log.d("Add friend",e.toString());
-                                        }
-                                    });
-                            return;
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Log.d("Add friend",e.toString());
+                                            }
+                                        });
+                                return;
+                            }
                         }
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getContext(),"Error!",Toast.LENGTH_SHORT).show();
-                        Log.d("Add friend",e.toString());
-                    }
-                });
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getContext(),"Error!",Toast.LENGTH_SHORT).show();
+                            Log.d("Add friend",e.toString());
+                        }
+                    });
+        }
     }
+
 
     private String getCountryISO(){
         String iso=null;
         TelephonyManager telephonyManager= (TelephonyManager) getContext().getSystemService(TELEPHONY_SERVICE);
         if(telephonyManager.getNetworkCountryIso()!=null){
-            if (telephonyManager.getNetworkCountryIso().equals(""));{
+            if (telephonyManager.getNetworkCountryIso().equals("")){
                 iso=telephonyManager.getNetworkCountryIso();
             }
         }
-        return CountryToPhonePrefix.getPhone(iso);
+        if(iso != null){
+            return CountryToPhonePrefix.getPhone(iso);
+        }else{
+            return CountryToPhonePrefix.getPhone("IN");
+        }
+
     }
 }
