@@ -99,17 +99,15 @@ public class VerifyOTP extends AppCompatActivity {
 
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks=
             new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-
                 @Override
                 public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
 
                     String code=phoneAuthCredential.getSmsCode();
-                    if(code!=null){
+                    if(code!=null) {
                         pinView.setText(code);
                         progressBar.setVisibility(View.VISIBLE);
                         verifyCode(code);
                     }
-
                 }
 
                 @Override
