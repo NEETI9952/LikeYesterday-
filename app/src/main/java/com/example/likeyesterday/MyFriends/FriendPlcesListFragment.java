@@ -46,6 +46,7 @@ public class FriendPlcesListFragment extends Fragment {
     int count;
     private ProgressBar progressBar;
     private ImageView emptyListIV;
+    private Query query;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,23 +61,30 @@ public class FriendPlcesListFragment extends Fragment {
         recyclerView=root.findViewById(R.id.placesList);
         emptyListIV=root.findViewById(R.id.imageViewAddFriendsPlacesListEmpty);
         progressBar=root.findViewById(R.id.progressBarFriendsPlacesList);
-        setRecyclerView();
+         query= (Query) currentUserDocumentReference.collection("FriendsList").document(friendUid).collection("Our Places");
+
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                Log.i("testingCountof","no of places="+task.getResult().size());
+                if(task.getResult().isEmpty()){
+                    progressBar.setVisibility(View.INVISIBLE);
+                    emptyListIV.setImageResource(R.drawable.undraw_empty_xct9);
+                    emptyListIV.setVisibility(View.VISIBLE);
+                }else{
+                    progressBar.setVisibility(View.INVISIBLE);
+                    setRecyclerView();
+                }
+            }
+        });
+
+
         return root;
     }
 
     private void setRecyclerView() {
-        Query query= (Query) currentUserDocumentReference.collection("FriendsList").document(friendUid).collection("Our Places");
-        progressBar.setVisibility(View.INVISIBLE);
-        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                    Log.i("testingCountof","no of places="+task.getResult().size());
-                    if(task.getResult().isEmpty()){
-                        emptyListIV.setImageResource(R.drawable.undraw_empty_xct9);
-                        emptyListIV.setVisibility(View.VISIBLE);
-                    }
-            }
-        });
+
+
         FirestoreRecyclerOptions<FirestoreRecyclerModelClass> options=new FirestoreRecyclerOptions.Builder<FirestoreRecyclerModelClass>().setQuery(query,FirestoreRecyclerModelClass.class).build();
         friendsPlacesFirestoreAdapter=new FriendsPlacesFirestoreAdapter(getContext(),options);
 
@@ -85,6 +93,12 @@ public class FriendPlcesListFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(friendsPlacesFirestoreAdapter);
         Log.i("tesingcount",String.valueOf(friendsPlacesFirestoreAdapter.getItemCount()));
+
+    }
+
+    private void SetFirestoreRecyler(){
+
+
     }
 
     @Override

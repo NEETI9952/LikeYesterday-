@@ -46,14 +46,18 @@ public class FriendsListFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private FriendsFirestoreAdapter friendsFirestoreAdapter;
-    private ProgressBar progressBar;
-    private ImageView emptyListIV;
+    public static ProgressBar progressBar;
+    public static ImageView emptyListIV;
+//    private  Query query;
+    private boolean nonEmptyRecycler=false;
 
 //    public static String uid;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
     }
 
     @Override
@@ -65,6 +69,8 @@ public class FriendsListFragment extends Fragment {
         emptyListIV=root.findViewById(R.id.imageViewAddFriendsListEmpty);
         progressBar=root.findViewById(R.id.progressBarFriendsList);
         add=root.findViewById(R.id.addFriendButton);
+        progressBar.setVisibility(View.VISIBLE);
+        emptyListIV.setImageResource(R.drawable.undraw_empty_xct9);
 
 
         add.setOnClickListener(new View.OnClickListener() {
@@ -74,41 +80,71 @@ public class FriendsListFragment extends Fragment {
             }
         });
 
+//        query=currentUserDocumentReference.collection("FriendsList");
+////        progressBar.setVisibility(View.INVISIBLE);
+//        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                Log.i("testingCountofplaces","no of friends="+task.getResult().size());
+//                if(task.getResult().isEmpty()){
+////                    progressBar.setVisibility(View.INVISIBLE);
+//                    emptyListIV.setImageResource(R.drawable.undraw_empty_xct9);
+//                    emptyListIV.setVisibility(View.VISIBLE);
+//                }else{
+//                    nonEmptyRecycler=true;
+//                    progressBar.setVisibility(View.INVISIBLE);
+
+//                }
+//            }
+//        });
         setRecyclerView();
+        Log.i("testinglifecycle","reached");
+
+
         return  root;
     }
 
     private void setRecyclerView() {
-
+        Log.i("testinglifecycle","reached oncreate");
         Query query=currentUserDocumentReference.collection("FriendsList");
-        progressBar.setVisibility(View.INVISIBLE);
+//        progressBar.setVisibility(View.INVISIBLE);
         query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 Log.i("testingCountofplaces","no of friends="+task.getResult().size());
-                if(task.getResult().isEmpty()){
-                    emptyListIV.setImageResource(R.drawable.undraw_empty_xct9);
+                if(task.getResult().isEmpty()) {
+                    progressBar.setVisibility(View.INVISIBLE);
+
                     emptyListIV.setVisibility(View.VISIBLE);
                 }
             }
         });
-        FirestoreRecyclerOptions<FirestoreRecyclerModelClass> options=new FirestoreRecyclerOptions.Builder<FirestoreRecyclerModelClass>().setQuery(query,FirestoreRecyclerModelClass.class).build();
-        friendsFirestoreAdapter=new FriendsFirestoreAdapter(getContext(),options);
+//        if(nonEmptyRecycler==true) {
+
+//        }
+        FirestoreRecyclerOptions<FirestoreRecyclerModelClass> options = new FirestoreRecyclerOptions.Builder<FirestoreRecyclerModelClass>().setQuery(query, FirestoreRecyclerModelClass.class).build();
+        friendsFirestoreAdapter = new FriendsFirestoreAdapter(getContext(), options);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(friendsFirestoreAdapter);
+
+
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        friendsFirestoreAdapter.startListening();
+//        if(nonEmptyRecycler==true) {
+            friendsFirestoreAdapter.startListening();
+//        }
     }
 
     @Override
     public void onStop() {
         super.onStop();
+
         friendsFirestoreAdapter.stopListening();
+
     }
 
     public void requestContactPermission() {
@@ -172,6 +208,15 @@ public class FriendsListFragment extends Fragment {
                 }
             }
         }
+    }
+
+    public static void hideProgressbar(){
+        progressBar.setVisibility(View.INVISIBLE);
+        emptyListIV.setVisibility(View.INVISIBLE);
+    }
+    public static void showProgressbar(){
+//        progressBar.setVisibility(View.VISIBLE);
+        emptyListIV.setVisibility(View.VISIBLE);
     }
 
 

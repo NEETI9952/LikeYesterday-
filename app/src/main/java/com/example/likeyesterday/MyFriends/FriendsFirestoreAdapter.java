@@ -38,6 +38,8 @@ import java.util.Map;
 
 import static com.example.likeyesterday.MyFriends.FriendsListFragment.friendName;
 import static com.example.likeyesterday.MyFriends.FriendsListFragment.friendUid;
+import static com.example.likeyesterday.MyFriends.FriendsListFragment.hideProgressbar;
+import static com.example.likeyesterday.MyFriends.FriendsListFragment.showProgressbar;
 import static com.example.likeyesterday.ProfileFragment.currentUserDocumentReference;
 import static com.example.likeyesterday.ProfileFragment.db;
 
@@ -184,6 +186,19 @@ public class FriendsFirestoreAdapter extends FirestoreRecyclerAdapter<FirestoreR
             friendPhoneNumber=itemView.findViewById(R.id.phoneNumberTextViewFriendsList);
             cardView=itemView.findViewById(R.id.cardView);
             constraintLayout=itemView.findViewById(R.id.constraintLayout);
+        }
+    }
+
+    @Override
+    public void onDataChanged() {
+        super.onDataChanged();
+        Log.i("testinglifecycle","reached ran");
+
+        if(getItemCount()>=1){
+        hideProgressbar();
+        }
+        else{
+            showProgressbar();
         }
     }
 }
