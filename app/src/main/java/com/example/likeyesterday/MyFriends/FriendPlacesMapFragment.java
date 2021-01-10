@@ -6,6 +6,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
+
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -39,6 +40,8 @@ import android.widget.Toast;
 
 import com.example.likeyesterday.FirestoreRecyclerModelClass;
 import com.example.likeyesterday.R;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -50,6 +53,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -92,29 +96,68 @@ public class FriendPlacesMapFragment extends Fragment {
     LocationListener locationListener;
     BitmapDescriptor customMarker;
     String finalAddress;
-    Map<String,Object> myPlace;
+    Map<String, Object> myPlace;
     ImageView imageView;
     String currentPhotoPath;
     ProgressBar p1;
     private String imageUrl;
+    FusedLocationProviderClient fusedLocationProviderClient;
 
-    CollectionReference friendPlacesCollection =currentUserDocumentReference.collection("FriendsList").document(friendUid).collection("Our Places");
 
-    public void goToMap(Location location, String title,String snippet){
-        if(location!=null){
-            mMap.clear();
-            addOldPlaces();
-            LatLng userLocation= new LatLng(location.getLatitude(),location.getLongitude());
-//            BitmapDescriptor customMarker = BitmapDescriptorFactory.fromResource(R.drawable.mapspin);
-//            customMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW);
-            try{
-                mMap.addMarker(new MarkerOptions().position(userLocation).title(title).icon(customMarker).snippet(snippet));
-                mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation,15));
-            }catch (Exception e){
-                e.printStackTrace();
-            }
+    CollectionReference friendPlacesCollection = currentUserDocumentReference.collection("FriendsList").document(friendUid).collection("Our Places");
+
+//    public void goToMap(Location location, String title, String snippet) {
+//        if (location != null) {
+//            mMap.clear();
+//            addOldPlaces();
+//            LatLng userLocation = new LatLng(location.getLatitude(), location.getLongitude());
+////            BitmapDescriptor customMarker = BitmapDescriptorFactory.fromResource(R.drawable.mapspin);
+////            customMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW);
+//            try {
+//                mMap.addMarker(new MarkerOptions().position(userLocation).title(title).icon(customMarker).snippet(snippet));
+////                mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+////                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation,15));
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
+
+    private void enableUserPosition() {
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
         }
+        mMap.setMyLocationEnabled(true);
+        zoomToUserLocation();
+    }
+
+    private void zoomToUserLocation() {
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        Task<Location> locationTask = fusedLocationProviderClient.getLastLocation();
+        locationTask.addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(final Location location) {
+                LatLng latLng= new LatLng(location.getLatitude(),location.getLongitude());
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,15));
+            }
+        });
+
     }
 //    public void addPhoto(){
 //        Intent intent=new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -129,12 +172,13 @@ public class FriendPlacesMapFragment extends Fragment {
         if(grantResults.length>0 && grantResults[0]== PackageManager.PERMISSION_GRANTED){
 
             if(ContextCompat.checkSelfPermission(Objects.requireNonNull(getContext()), Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED){
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,locationListener);
-                Location lastKnownLocation= locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                customMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE);
-                goToMap(lastKnownLocation,"Your Location","");
+                enableUserPosition();
+                zoomToUserLocation();
+//                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,locationListener);
+//                Location lastKnownLocation= locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+//                customMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE);
+//                goToMap(lastKnownLocation,"Your Location","");
             }
-
 //            if (ContextCompat.checkSelfPermission(Objects.requireNonNull(getContext()), Manifest.permission.READ_EXTERNAL_STORAGE)==PackageManager.PERMISSION_GRANTED){
 //                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 //                    addPhoto();
@@ -144,16 +188,24 @@ public class FriendPlacesMapFragment extends Fragment {
         }
     }
 
-
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
 
         @Override
         public void onMapReady(GoogleMap googleMap) {
             mMap = googleMap;
+            fusedLocationProviderClient= LocationServices.getFusedLocationProviderClient( getContext());
+
+            mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+            mMap.getUiSettings().setRotateGesturesEnabled(true);
+            mMap.getUiSettings().setZoomGesturesEnabled(true);
+            mMap.getUiSettings().setZoomControlsEnabled(true);
+            mMap.getUiSettings().setScrollGesturesEnabledDuringRotateOrZoom(true);
+
 
             mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
                 @Override
                 public void onMapLongClick(LatLng latLng) {
+                    getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                     Geocoder geocoder= new Geocoder(getContext(), Locale.getDefault());
                     String address ="";
 
@@ -184,16 +236,15 @@ public class FriendPlacesMapFragment extends Fragment {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-
                     finalAddress = address;
                     showAlertDialogForPoint(latLng);
                 }
             });
 
             mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-
                 @Override
                 public void onInfoWindowClick(Marker marker) {
+                    getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                     final Marker selectedMarker=marker;
 //                    mMap.setOnMapClickListener(null);
 //                    mMap.setOnMarkerClickListener(null);
@@ -249,30 +300,33 @@ public class FriendPlacesMapFragment extends Fragment {
             });
 
 
-            locationManager=(LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
-            locationListener = new LocationListener() {
-                @Override
-                public void onLocationChanged(@NonNull Location location) {
-                    customMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE);
-                    goToMap(location,"your location","");
-                }
-
-                @Override
-                public void onStatusChanged(String provider, int status, Bundle extras) {
-                }
-            };
+//            locationManager=(LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
+//            locationListener = new LocationListener() {
+//                @Override
+//                public void onLocationChanged(@NonNull Location location) {
+//                    customMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE);
+//                    goToMap(location,"your location","");
+//                }
+//
+//                @Override
+//                public void onStatusChanged(String provider, int status, Bundle extras) {
+//                }
+//            };
 
             if(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED){
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,locationListener);
+//                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,locationListener);
 
-                Location lastKnownLocation= locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+//                Location lastKnownLocation= locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
-                customMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE);
-                goToMap(lastKnownLocation,"Your Location","");
+//                customMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE);
+//                goToMap(lastKnownLocation,"Your Location","");
+//                LatLng latLngLastLocation= new LatLng(lastKnownLocation.getLatitude(),lastKnownLocation.getLongitude());
+//                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngLastLocation,15));
+
+                enableUserPosition();
             }else {
                 ActivityCompat.requestPermissions(Objects.requireNonNull(getActivity()),new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
             }
-
             addOldPlaces();
 
 //            friendPlacesCollection.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -311,8 +365,6 @@ public class FriendPlacesMapFragment extends Fragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_friend_places_map, container, false);
-
-
     }
 
     @Override
@@ -327,12 +379,14 @@ public class FriendPlacesMapFragment extends Fragment {
 
         if(mMap!=null){
             mMap.clear();
-            mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+            mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
             mMap.setOnMapLongClickListener((GoogleMap.OnMapLongClickListener) this);
             mMap.getUiSettings().setRotateGesturesEnabled(true);
             mMap.getUiSettings().setZoomGesturesEnabled(true);
             mMap.getUiSettings().setZoomControlsEnabled(true);
-        }}catch (Exception e){}
+            mMap.getUiSettings().setScrollGesturesEnabledDuringRotateOrZoom(true);
+        }
+        }catch (Exception e){}
     }
 
 //    -----------------------------
@@ -352,7 +406,7 @@ public class FriendPlacesMapFragment extends Fragment {
 //                        placeLocation.setLongitude(geopoint.getLongitude());
                     LatLng placeLocation=new LatLng(geopoint.getLatitude(),geopoint.getLongitude());
 
-                    customMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW);
+                    customMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
                     mMap.addMarker(new MarkerOptions().position(placeLocation).title(PlaceName).icon(customMarker).snippet(times));
 //                        goToMap(placeLocation,PlaceName,"");
                 }
@@ -450,6 +504,7 @@ public class FriendPlacesMapFragment extends Fragment {
                                                                                                 Toast.makeText(getContext(),"Location Added",Toast.LENGTH_SHORT).show();
                                                                                                 customMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE);
                                                                                                 mMap.addMarker(new MarkerOptions().position(point).title(placeNameEditText).icon(customMarker).snippet("1"));
+                                                                                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(point,15));
                                                                                             }
                                                                                         }).addOnFailureListener(new OnFailureListener() {
                                                                                             @Override
@@ -539,6 +594,7 @@ public class FriendPlacesMapFragment extends Fragment {
 
         // Display the dialog
         alertDialog.show();
+        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         EditText editText=alertDialog.findViewById(R.id.etTitle);
         editText.setText(finalAddress);
 
@@ -695,6 +751,7 @@ public class FriendPlacesMapFragment extends Fragment {
 
         // Display the dialog
         alertDialogg.show();
+        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
         friendPlacesCollection.document(ourPlaceDocID).get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {

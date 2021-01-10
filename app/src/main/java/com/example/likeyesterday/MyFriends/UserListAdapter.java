@@ -83,9 +83,8 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.UserLi
                     Log.i("testinglifecycle","click me baby!");
 
                     new AlertDialog.Builder(context)
-                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .setIcon(R.drawable.ic_baseline_person_add_alt_1_24)
                             .setTitle("Add friend")
-                            .setMessage("Add a new friend?")
                             .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {

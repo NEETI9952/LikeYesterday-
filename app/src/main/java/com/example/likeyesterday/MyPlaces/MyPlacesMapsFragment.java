@@ -26,6 +26,8 @@ import android.widget.Toast;
 
 import com.example.likeyesterday.FirestoreRecyclerModelClass;
 import com.example.likeyesterday.R;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -37,6 +39,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
@@ -65,20 +68,58 @@ public class MyPlacesMapsFragment extends Fragment{
     String address, finalAddress;
     Location placeLocation;
     Map<String,Object> myPlace;
+    FusedLocationProviderClient fusedLocationProviderClient;
 
 
     CollectionReference myPlacesCollection =currentUserDocumentReference.collection("My Places");
 
-    public void goToMap(Location location,String title,String snippet){
-        if(location!=null){
-            mMap.clear();
-            LatLng userLocation= new LatLng(location.getLatitude(),location.getLongitude());
-//            BitmapDescriptor customMarker = BitmapDescriptorFactory.fromResource(R.drawable.mapspin);
-//            customMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW);
-            mMap.addMarker(new MarkerOptions().position(userLocation).title(title).icon(customMarker).snippet(snippet));
-//            mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation,10));
+//    public void goToMap(Location location,String title,String snippet){
+//        if(location!=null){
+//            mMap.clear();
+//            LatLng userLocation= new LatLng(location.getLatitude(),location.getLongitude());
+////            BitmapDescriptor customMarker = BitmapDescriptorFactory.fromResource(R.drawable.mapspin);
+////            customMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW);
+//            mMap.addMarker(new MarkerOptions().position(userLocation).title(title).icon(customMarker).snippet(snippet));
+////            mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+//            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation,10));
+//        }
+//    }
+
+    private void enableUserPosition() {
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
         }
+        mMap.setMyLocationEnabled(true);
+        zoomToUserLocation();
+    }
+
+    private void zoomToUserLocation() {
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        Task<Location> locationTask = fusedLocationProviderClient.getLastLocation();
+        locationTask.addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(final Location location) {
+                LatLng latLng= new LatLng(location.getLatitude(),location.getLongitude());
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,15));
+            }
+        });
+
     }
 
     @Override
@@ -86,10 +127,12 @@ public class MyPlacesMapsFragment extends Fragment{
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if(grantResults.length>0 && grantResults[0]== PackageManager.PERMISSION_GRANTED){
             if(ContextCompat.checkSelfPermission(Objects.requireNonNull(getContext()), Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED){
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,locationListener);
-                Location lastKnownLocation= locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                customMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE);
-                goToMap(lastKnownLocation,"Your Location","");
+//                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,locationListener);
+//                Location lastKnownLocation= locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+//                customMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE);
+//                goToMap(lastKnownLocation,"Your Location","");
+                enableUserPosition();
+                zoomToUserLocation();
             }
         }
     }
@@ -99,6 +142,12 @@ public class MyPlacesMapsFragment extends Fragment{
         @Override
         public void onMapReady(GoogleMap googleMap) {
             mMap = googleMap;
+            fusedLocationProviderClient= LocationServices.getFusedLocationProviderClient( getContext());
+
+            mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+            mMap.getUiSettings().setRotateGesturesEnabled(true);
+            mMap.getUiSettings().setZoomGesturesEnabled(true);
+            mMap.getUiSettings().setZoomControlsEnabled(true);
             mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
                 @Override
                 public void onMapLongClick(LatLng latLng) {
@@ -128,7 +177,6 @@ public class MyPlacesMapsFragment extends Fragment{
                                 }
                                 Log.i("Address", address);
                             }
-
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -221,27 +269,29 @@ public class MyPlacesMapsFragment extends Fragment{
 //                }
 //            });
 
-            locationManager=(LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
-            locationListener = new LocationListener() {
-                @Override
-                public void onLocationChanged(@NonNull Location location) {
-                    customMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE);
-                    goToMap(location,"your location","");
-                }
-
-                @Override
-                public void onStatusChanged(String provider, int status, Bundle extras) {
-
-                }
-            };
+//            locationManager=(LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
+//            locationListener = new LocationListener() {
+//                @Override
+//                public void onLocationChanged(@NonNull Location location) {
+//                    customMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE);
+//                    goToMap(location,"your location","");
+//                }
+//
+//                @Override
+//                public void onStatusChanged(String provider, int status, Bundle extras) {
+//
+//                }
+//            };
 
             if(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED){
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,locationListener);
-
-                Location lastKnownLocation= locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-
-                customMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE);
-                goToMap(lastKnownLocation,"Your Location","");
+//                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,locationListener);
+//
+//                Location lastKnownLocation= locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+//
+//                customMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE);
+//                goToMap(lastKnownLocation,"Your Location","");
+                enableUserPosition();
+                zoomToUserLocation();
             }else {
                 ActivityCompat.requestPermissions(Objects.requireNonNull(getActivity()),new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
             }
