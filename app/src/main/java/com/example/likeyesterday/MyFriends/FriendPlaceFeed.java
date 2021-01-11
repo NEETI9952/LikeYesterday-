@@ -124,7 +124,10 @@ public class FriendPlaceFeed extends AppCompatActivity {
                         Log.i("Feed","kkkkkkkkkkkkkkkk");
 
                         placeInfoCollection= friendPlacesCollection.document(ourPlaceDocID).collection("PlaceInfo");
-                        placeInfoCollection.get()
+                        placeInfoCollection
+                                .orderBy("Date")
+                                .orderBy("Time")
+                                .get()
                                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                                     @Override
                                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {

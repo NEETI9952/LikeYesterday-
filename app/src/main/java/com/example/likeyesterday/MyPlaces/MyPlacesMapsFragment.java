@@ -308,7 +308,7 @@ public class MyPlacesMapsFragment extends Fragment{
 
                         LatLng placeLocation=new LatLng(geopointPlace.getLatitude(),geopointPlace.getLongitude());
 
-                        customMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW);
+                        customMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
                         mMap.addMarker(new MarkerOptions().position(placeLocation).title(PlaceName).icon(customMarker).snippet(timesPlace));
 
                     }

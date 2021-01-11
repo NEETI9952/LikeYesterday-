@@ -29,16 +29,16 @@ import com.example.likeyesterday.MyFriends.FriendsListFragment;
 import com.example.likeyesterday.MyPlaces.MyPlacesClass;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.storage.StorageReference;
 
-import java.security.Permissions;
+import static com.example.likeyesterday.ProfileFragment.currentUserDocumentReference;
+import static com.example.likeyesterday.ProfileFragment.user;
+import static com.example.likeyesterday.ProfileFragment.uid;
 
 public class HomeScreenActivity2 extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
     public static final int CAMERA_PERM_CODE = 101;
     public static final int CAMERA_REQUEST_CODE = 102;
     public static final int GALLERY_REQUEST_CODE = 105;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -157,9 +157,15 @@ public class HomeScreenActivity2 extends AppCompatActivity implements Navigation
                                 Intent intent= new Intent(HomeScreenActivity2.this,StartActivity.class);
                                 Log.i("Item selected","Log out");
 
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                finish();
+                                user=null;
+                                uid=null;
+                                currentUserDocumentReference=null;
                                 startActivity(intent);
 
+//                                finishAffinity();
+//                                onDestroy();
                             }
                         })
                         .setNegativeButton("No",null)
