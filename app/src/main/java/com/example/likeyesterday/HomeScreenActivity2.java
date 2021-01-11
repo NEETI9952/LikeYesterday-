@@ -130,7 +130,7 @@ public class HomeScreenActivity2 extends AppCompatActivity implements Navigation
                 Intent emailIntent= new Intent(Intent.ACTION_SEND);
                 emailIntent.setData(Uri.parse("mailto:"));
                 //mail to protocol that lets you mail using client installed on your device
-                String[] to={"neetibisht919@gmail.com"};
+                String[] to={"SupportatLikeYesterday@gmail.com"};
                 emailIntent.putExtra(Intent.EXTRA_EMAIL,to);
                 emailIntent.putExtra(Intent.EXTRA_SUBJECT,"Like Yesterday App");
                 emailIntent.setType("message/rfc822");
