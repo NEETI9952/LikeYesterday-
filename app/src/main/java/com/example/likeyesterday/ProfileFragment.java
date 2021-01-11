@@ -37,6 +37,9 @@ public class ProfileFragment extends Fragment {
     public static FirebaseFirestore db= FirebaseFirestore.getInstance();
     public static FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     public static String uid = user.getUid();
+//    public static FirebaseFirestore db;
+//    public static FirebaseUser user;
+//    public static String uid;
 
     public static DocumentReference currentUserDocumentReference = db.collection("Users").document(uid);
 
@@ -66,9 +69,10 @@ public class ProfileFragment extends Fragment {
         friendCard=root.findViewById(R.id.friendCard);
         requestCard=root.findViewById(R.id.requestCard);
 
-
-
-
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        uid = user.getUid();
+        currentUserDocumentReference = db.collection("Users").document(uid);
+        Log.i("userid",uid);
 
 
 
@@ -253,7 +257,6 @@ public class ProfileFragment extends Fragment {
                                 @Override
                                 public void onSuccess(DocumentSnapshot documentSnapshot) {
                                     fullNameProfile.setText(documentSnapshot.getString("Full Name"));
-
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {

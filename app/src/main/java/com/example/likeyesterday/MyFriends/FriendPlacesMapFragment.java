@@ -344,7 +344,7 @@ public class FriendPlacesMapFragment extends Fragment {
 //                        customMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW);
 //                        mMap.addMarker(new MarkerOptions().position(placeLocation).title(PlaceName).icon(customMarker).snippet(times));
 ////                        goToMap(placeLocation,PlaceName,"");
-//                    }
+//                    }n
 //                }
 //            }).addOnFailureListener(new OnFailureListener() {
 //                @Override
