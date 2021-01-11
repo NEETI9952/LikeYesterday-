@@ -113,26 +113,26 @@ public class RequestListFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        if(friendsFirestoreAdapter.getItemCount()>=1){
-//            hideProgressbar();
-//            hideImageView();
-            Log.i("testinglifecycle","item count more than 1 on resume");
-        }else{
-            if(emptyListIV.getVisibility()==View.VISIBLE){
-                Log.i("testinglifecycle","imageview is visible on resume");
-
-            }
-            progressBar=getView().findViewById(R.id.progressBarRequestsList);
-            progressBar.setVisibility(View.VISIBLE);
-            emptyListIV.setVisibility(View.INVISIBLE);
-            Log.i("testinglifecycle","imageview is not visible on resume");
-            Log.i("testinglifecycle","progress bar is  visible on resume");
-            Log.i("testinglifecycle","item count less than 1 on resume");
+//        if(friendsFirestoreAdapter.getItemCount()>=1){
+////            hideProgressbar();
+////            hideImageView();
+//            Log.i("testinglifecycle","item count more than 1 on resume");
+//        }else{
+//            if(emptyListIV.getVisibility()==View.VISIBLE){
+//                Log.i("testinglifecycle","imageview is visible on resume");
 //
-        }
-////        progressBar=getView().findViewById(R.id.progressBarFriendsList);
-//        progressBar.setVisibility(View.VISIBLE);
-        Log.i("testinglifecycle","reached ran Onresume");
+//            }
+//            progressBar=getView().findViewById(R.id.progressBarRequestsList);
+//            progressBar.setVisibility(View.VISIBLE);
+//            emptyListIV.setVisibility(View.INVISIBLE);
+//            Log.i("testinglifecycle","imageview is not visible on resume");
+//            Log.i("testinglifecycle","progress bar is  visible on resume");
+//            Log.i("testinglifecycle","item count less than 1 on resume");
+////
+//        }
+//////        progressBar=getView().findViewById(R.id.progressBarFriendsList);
+////        progressBar.setVisibility(View.VISIBLE);
+//        Log.i("testinglifecycle","reached ran Onresume");
     }
 
 

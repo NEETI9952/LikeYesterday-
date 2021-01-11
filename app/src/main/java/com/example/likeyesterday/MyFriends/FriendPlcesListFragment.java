@@ -75,16 +75,19 @@ public class FriendPlcesListFragment extends Fragment {
 
        Query query= (Query) currentUserDocumentReference.collection("FriendsList").document(friendUid).collection("Our Places");
 
-//        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                Log.i("testingCountof","no of places="+task.getResult().size());
-//                if(task.getResult().isEmpty()){
-//                    progressBar.setVisibility(View.INVISIBLE);
-//                    emptyListIV.setVisibility(View.VISIBLE);
-//                }
-//            }
-//        });
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                Log.i("testingCountof","no of places="+task.getResult().size());
+                if(task.getResult().isEmpty()){
+                    progressBar.setVisibility(View.INVISIBLE);
+                    emptyListIV.setVisibility(View.VISIBLE);
+                }else{
+                    progressBar.setVisibility(View.INVISIBLE);
+                    emptyListIV.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
 
 
         FirestoreRecyclerOptions<FirestoreRecyclerModelClass> options=new FirestoreRecyclerOptions.Builder<FirestoreRecyclerModelClass>().setQuery(query,FirestoreRecyclerModelClass.class).build();
@@ -122,18 +125,18 @@ public class FriendPlcesListFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-//        if(friendsPlacesFirestoreAdapter.getItemCount()>=1){
-////            hideProgressbar();
-////            hideImageView();
-//            Log.i("testinglifecycle","item count more than 1 on resume");
-//        }else{
-//            if(emptyListIV.getVisibility()==View.VISIBLE){
-//                Log.i("testinglifecycle","imageview is visible on resume");
-//
-//            }
-//            progressBar=getView().findViewById(R.id.progressBarFriendsPlacesList);
-//            progressBar.setVisibility(View.VISIBLE);
-//            emptyListIV.setVisibility(View.INVISIBLE);
+        if(friendsPlacesFirestoreAdapter.getItemCount()>=1){
+//            hideProgressbar();
+//            hideImageView();
+            Log.i("testinglifecycle","item count more than 1 on resume");
+        }else {
+            if (emptyListIV.getVisibility() == View.VISIBLE) {
+                Log.i("testinglifecycle", "imageview is visible on resume");
+
+            }
+            progressBar = getView().findViewById(R.id.progressBarFriendsPlacesList);
+            progressBar.setVisibility(View.VISIBLE);
+            emptyListIV.setVisibility(View.INVISIBLE);
 //            Log.i("testinglifecycle","imageview is not visible on resume");
 //            Log.i("testinglifecycle","progress bar is  visible on resume");
 //            Log.i("testinglifecycle","item count less than 1 on resume");
@@ -142,5 +145,6 @@ public class FriendPlcesListFragment extends Fragment {
 //////        progressBar=getView().findViewById(R.id.progressBarFriendsList);
 ////        progressBar.setVisibility(View.VISIBLE);
 //        Log.i("testinglifecycle","reached ran Onresume");
+        }
     }
 }
