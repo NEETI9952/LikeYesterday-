@@ -91,24 +91,26 @@ public class AddFriendsFragment extends Fragment {
     private void getContactList() {
         String ISOPrefix = getCountryISO();
 
-        Cursor phones = getContext().getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, ContactsContract.Contacts.Entity.RAW_CONTACT_ID + " ASC");
+       try {
+           Cursor phones = getContext().getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, ContactsContract.Contacts.Entity.RAW_CONTACT_ID + " ASC");
 
-        while(phones.moveToNext()){
-            String name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-            String phone = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+           while (phones.moveToNext()) {
+               String name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+               String phone = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
 
-            phone = phone.replace(" ", "");
-            phone = phone.replace("-", "");
-            phone = phone.replace("(", "");
-            phone = phone.replace(")", "");
+               phone = phone.replace(" ", "");
+               phone = phone.replace("-", "");
+               phone = phone.replace("(", "");
+               phone = phone.replace(")", "");
 
-            if(!String.valueOf(phone.charAt(0)).equals("+"))
-                phone = ISOPrefix + phone;
+               if (!String.valueOf(phone.charAt(0)).equals("+"))
+                   phone = ISOPrefix + phone;
 
-            UserObject mContact = new UserObject(name, phone);
-            contactList.add(mContact);
-            getUserDetails(mContact);
-        }
+               UserObject mContact = new UserObject(name, phone);
+               contactList.add(mContact);
+               getUserDetails(mContact);
+           }
+       }catch(Exception e){}
 
         if(userList.isEmpty()){
             progressBar.setVisibility(View.INVISIBLE);
@@ -188,12 +190,14 @@ public class AddFriendsFragment extends Fragment {
 
     private String getCountryISO(){
         String iso=null;
-        TelephonyManager telephonyManager= (TelephonyManager) Objects.requireNonNull(getContext()).getSystemService(TELEPHONY_SERVICE);
-        if(telephonyManager.getNetworkCountryIso()!=null){
-            if (telephonyManager.getNetworkCountryIso().equals("")){
-                iso=telephonyManager.getNetworkCountryIso();
+        try {
+            TelephonyManager telephonyManager = (TelephonyManager) Objects.requireNonNull(getContext()).getSystemService(TELEPHONY_SERVICE);
+            if (telephonyManager.getNetworkCountryIso() != null) {
+                if (telephonyManager.getNetworkCountryIso().equals("")) {
+                    iso = telephonyManager.getNetworkCountryIso();
+                }
             }
-        }
+        }catch (Exception e){}
         if(iso != null){
             return CountryToPhonePrefix.getPhone(iso);
         }else{

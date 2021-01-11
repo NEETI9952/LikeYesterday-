@@ -66,17 +66,17 @@ public class RequestListFragment extends Fragment {
         Query query=currentUserDocumentReference.collection("Request List").orderBy("FullName", Query.Direction.ASCENDING);
         Log.i("Request List",uid);
 
-        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                Log.i("testingCountof","Request="+task.getResult().size());
-                if(task.getResult().isEmpty()){
-                    progressBar.setVisibility(View.INVISIBLE);
-
-                    emptyListIV.setVisibility(View.VISIBLE);
-                }
-            }
-        });
+//        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                Log.i("testingCountof","Request="+task.getResult().size());
+//                if(task.getResult().isEmpty()){
+//                    progressBar.setVisibility(View.INVISIBLE);
+//
+//                    emptyListIV.setVisibility(View.VISIBLE);
+//                }
+//            }
+//        });
 
         FirestoreRecyclerOptions<FirestoreRecyclerModelClass> options=new FirestoreRecyclerOptions.Builder<FirestoreRecyclerModelClass>().setQuery(query,FirestoreRecyclerModelClass.class).build();
         friendsFirestoreAdapter=new FriendsFirestoreAdapter(getContext(),options);
@@ -96,13 +96,42 @@ public class RequestListFragment extends Fragment {
     public void onStop() {
         super.onStop();
 
-        friendsFirestoreAdapter.stopListening();
+
+//        friendsFirestoreAdapter.stopListening();
+//        progressBar=getView().findViewById(R.id.progressBarRequestsList);
+//        progressBar.setVisibility(View.INVISIBLE);
+//        Log.i("testinglifecycle","progress bar is not visible on stop request list ");
+//        emptyListIV=getView().findViewById(R.id.imageViewRequestsListEmpty);
+//
+//        emptyListIV.setImageResource(R.drawable.undraw_empty_xct9);
+//        emptyListIV.setVisibility(View.INVISIBLE);
+//        Log.i("testinglifecycle","imageview is not visible ib stio reuest list");
+//
+//        Log.i("testinglifecycle","reached ran stop request list");
     }
     @Override
     public void onResume() {
         super.onResume();
-        progressBar=getView().findViewById(R.id.progressBarRequestsList);
-        progressBar.setVisibility(View.VISIBLE);
+
+        if(friendsFirestoreAdapter.getItemCount()>=1){
+//            hideProgressbar();
+//            hideImageView();
+            Log.i("testinglifecycle","item count more than 1 on resume");
+        }else{
+            if(emptyListIV.getVisibility()==View.VISIBLE){
+                Log.i("testinglifecycle","imageview is visible on resume");
+
+            }
+            progressBar=getView().findViewById(R.id.progressBarRequestsList);
+            progressBar.setVisibility(View.VISIBLE);
+            emptyListIV.setVisibility(View.INVISIBLE);
+            Log.i("testinglifecycle","imageview is not visible on resume");
+            Log.i("testinglifecycle","progress bar is  visible on resume");
+            Log.i("testinglifecycle","item count less than 1 on resume");
+//
+        }
+////        progressBar=getView().findViewById(R.id.progressBarFriendsList);
+//        progressBar.setVisibility(View.VISIBLE);
         Log.i("testinglifecycle","reached ran Onresume");
     }
 

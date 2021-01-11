@@ -1,21 +1,12 @@
 package com.example.likeyesterday.MyFriends;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
-import androidx.fragment.app.Fragment;
-
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
@@ -37,6 +28,13 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
+import androidx.fragment.app.Fragment;
 
 import com.example.likeyesterday.FirestoreRecyclerModelClass;
 import com.example.likeyesterday.R;
@@ -79,7 +77,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
-import static android.app.Activity.RESULT_OK;
 import static com.example.likeyesterday.HomeScreenActivity2.CAMERA_PERM_CODE;
 import static com.example.likeyesterday.HomeScreenActivity2.CAMERA_REQUEST_CODE;
 import static com.example.likeyesterday.HomeScreenActivity2.GALLERY_REQUEST_CODE;

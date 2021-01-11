@@ -71,6 +71,7 @@ public class ProfileFragment extends Fragment {
 
 
 
+
         currentUserDocumentReference.get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override

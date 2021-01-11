@@ -66,16 +66,16 @@ public class MyPlacesListFragment extends Fragment {
     private void setRecyclerView() {
         Query query=currentUserDocumentReference.collection("My Places");
 
-        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                Log.i("testingCountof","no of places="+task.getResult().size());
-                if(task.getResult().isEmpty()){
-                    progressBar.setVisibility(View.INVISIBLE);
-                    emptyListIV.setVisibility(View.VISIBLE);
-                }
-            }
-        });
+//        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                Log.i("testingCountof","no of places="+task.getResult().size());
+//                if(task.getResult().isEmpty()){
+//                    progressBar.setVisibility(View.INVISIBLE);
+//                    emptyListIV.setVisibility(View.VISIBLE);
+//                }
+//            }
+//        });
 
         FirestoreRecyclerOptions<FirestoreRecyclerModelClass> options=new FirestoreRecyclerOptions.Builder<FirestoreRecyclerModelClass>().setQuery(query,FirestoreRecyclerModelClass.class).build();
         placesFirestoreAdapter=new MyPacesFirestoreAdapter(getContext(),options);
@@ -95,12 +95,39 @@ public class MyPlacesListFragment extends Fragment {
     public void onStop() {
         super.onStop();
        placesFirestoreAdapter.stopListening();
+        progressBar=getView().findViewById(R.id.progressBarMyPlacesList);
+        progressBar.setVisibility(View.INVISIBLE);
+        Log.i("testinglifecycle","progress bar is not visible on stop");
+        emptyListIV=getView().findViewById(R.id.imageViewMyPlacesListEmpty);
+
+        emptyListIV.setImageResource(R.drawable.undraw_empty_xct9);
+        emptyListIV.setVisibility(View.INVISIBLE);
+        Log.i("testinglifecycle","imageview is not visible on stop");
+
+        Log.i("testinglifecycle","reached ran stop");
     }
     @Override
     public void onResume() {
         super.onResume();
-        progressBar=getView().findViewById(R.id.progressBarMyPlacesList);
-        progressBar.setVisibility(View.VISIBLE);
+        if(placesFirestoreAdapter.getItemCount()>=1){
+//            hideProgressbar();
+//            hideImageView();
+            Log.i("testinglifecycle","item count more than 1 on resume");
+        }else{
+            if(emptyListIV.getVisibility()==View.VISIBLE){
+                Log.i("testinglifecycle","imageview is visible on resume");
+
+            }
+            progressBar=getView().findViewById(R.id.progressBarMyPlacesList);
+            progressBar.setVisibility(View.VISIBLE);
+            emptyListIV.setVisibility(View.INVISIBLE);
+            Log.i("testinglifecycle","imageview is not visible on resume");
+            Log.i("testinglifecycle","progress bar is  visible on resume");
+            Log.i("testinglifecycle","item count less than 1 on resume");
+//
+        }
+////        progressBar=getView().findViewById(R.id.progressBarFriendsList);
+//        progressBar.setVisibility(View.VISIBLE);
         Log.i("testinglifecycle","reached ran Onresume");
     }
 }

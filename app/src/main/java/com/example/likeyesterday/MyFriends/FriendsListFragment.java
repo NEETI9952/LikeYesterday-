@@ -33,6 +33,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.Objects;
+
 import static com.example.likeyesterday.ProfileFragment.currentUserDocumentReference;
 import static com.example.likeyesterday.ProfileFragment.uid;
 
@@ -46,10 +48,12 @@ public class FriendsListFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private FriendsFirestoreAdapter friendsFirestoreAdapter;
+
     public static ProgressBar progressBar;
     public static ImageView emptyListIV;
 //    private  Query query;
     private boolean nonEmptyRecycler=false;
+    ViewGroup root;
 
 //    public static String uid;
 
@@ -57,6 +61,7 @@ public class FriendsListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Log.i("testinglifecycle","reached oncreate");
 
     }
 
@@ -66,10 +71,10 @@ public class FriendsListFragment extends Fragment {
         // Inflate the layout for this fragment
         ViewGroup root=(ViewGroup) inflater.inflate(R.layout.fragment_friends_list, container, false);
         recyclerView=root.findViewById(R.id.recyclerRequests);
-        emptyListIV=root.findViewById(R.id.imageViewAddFriendsListEmpty);
+        emptyListIV=root.findViewById(R.id.imageViewFriendsListEmpty);
         progressBar=root.findViewById(R.id.progressBarFriendsList);
         add=root.findViewById(R.id.addFriendButton);
-        progressBar.setVisibility(View.VISIBLE);
+//        progressBar.setVisibility(View.VISIBLE);
         emptyListIV.setImageResource(R.drawable.undraw_empty_xct9);
 
 
@@ -98,7 +103,7 @@ public class FriendsListFragment extends Fragment {
 //            }
 //        });
         setRecyclerView();
-        Log.i("testinglifecycle","reached");
+        Log.i("testinglifecycle","reached oncreate view");
 
 
         return  root;
@@ -108,17 +113,17 @@ public class FriendsListFragment extends Fragment {
         Log.i("testinglifecycle","reached oncreate");
         Query query=currentUserDocumentReference.collection("FriendsList");
 //        progressBar.setVisibility(View.INVISIBLE);
-        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                Log.i("testingCountofplaces","no of friends="+task.getResult().size());
-                if(task.getResult().isEmpty()) {
-                    progressBar.setVisibility(View.INVISIBLE);
-
-                    emptyListIV.setVisibility(View.VISIBLE);
-                }
-            }
-        });
+//        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                Log.i("testingCountofplaces","no of friends="+task.getResult().size());
+//                if(task.getResult().isEmpty()) {
+////                    progressBar.setVisibility(View.INVISIBLE);
+//
+////                    emptyListIV.setVisibility(View.VISIBLE);
+//                }
+//            }
+//        });
 //        if(nonEmptyRecycler==true) {
 
 //        }
@@ -137,25 +142,54 @@ public class FriendsListFragment extends Fragment {
 //        if(nonEmptyRecycler==true) {
 //        progressBar.setVisibility(View.VISIBLE);
             friendsFirestoreAdapter.startListening();
-
-
 //        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        progressBar=getView().findViewById(R.id.progressBarFriendsList);
-        progressBar.setVisibility(View.VISIBLE);
-        Log.i("testinglifecycle","reached ran Onresume");
+
+
+//        emptyListIV= Objects.requireNonNull(getView()).findViewById(R.id.imageViewFriendsListEmpty);
+//        emptyListIV.setImageResource(R.drawable.undraw_empty_xct9);
+
+
+        if(friendsFirestoreAdapter.getItemCount()>=1){
+//            hideProgressbar();
+//            hideImageView();
+            Log.i("testinglifecycle","item count more than 1 on resume");
+        }else{
+            progressBar= Objects.requireNonNull(getView()).findViewById(R.id.progressBarFriendsList);
+            progressBar.setVisibility(View.VISIBLE);
+            hideImageView();
+
+//            emptyListIV.setVisibility(View.VISIBLE);
+            Log.i("testinglifecycle","imageview is not visible on resume");
+            Log.i("testinglifecycle","progress bar is  visible on resume");
+            Log.i("testinglifecycle","item count less than 1 on resume");
+//
+        }
+//////        progressBar=getView().findViewById(R.id.progressBarFriendsList);
+////        progressBar.setVisibility(View.VISIBLE);
+        Log.i("testinglifecycle","reached ran Onresume friendslist");
     }
+
 
     @Override
     public void onStop() {
         super.onStop();
 
+
         friendsFirestoreAdapter.stopListening();
-        Log.i("testinglifecycle","reached ran stop");
+        progressBar= Objects.requireNonNull(getView()).findViewById(R.id.progressBarFriendsList);
+        progressBar.setVisibility(View.INVISIBLE);
+        Log.i("testinglifecycle","progress bar is not visible on stop Friendslsit");
+        emptyListIV=getView().findViewById(R.id.imageViewFriendsListEmpty);
+        emptyListIV.setImageResource(R.drawable.undraw_empty_xct9);
+        emptyListIV.setVisibility(View.INVISIBLE);
+        Log.i("testinglifecycle","imageview is not visible on stop  frinndslist");
+
+        Log.i("testinglifecycle","reached ran stop friendsList");
 
     }
 
@@ -222,14 +256,30 @@ public class FriendsListFragment extends Fragment {
         }
     }
 
-    public static void hideProgressbar() {
+    public  static void hideProgressbar() {
+        Log.i("","progress bar is not visible");
+
         progressBar.setVisibility(View.INVISIBLE);
-        emptyListIV.setVisibility(View.INVISIBLE);
+
+
     }
     public static void showProgressbar(){
-//        progressBar.setVisibility(View.VISIBLE);
-        emptyListIV.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
+        Log.i("testinglifecycle","progress bar is visible");
+
     }
+    public static void hideImageView() {
+
+        emptyListIV.setVisibility(View.INVISIBLE);
+        Log.i("testinglifecycle","imageview is not visible");
+    }
+    public static void showImageView(){
+
+        emptyListIV.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.INVISIBLE);
+        Log.i("testinglifecycle","imageview is visible FriendsList fragnebt");
+    }
+
 
 
 }

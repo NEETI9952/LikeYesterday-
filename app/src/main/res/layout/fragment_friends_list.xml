@@ -41,14 +41,15 @@
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="visible"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/recyclerRequests"
         app:layout_constraintEnd_toEndOf="@+id/recyclerRequests"
         app:layout_constraintStart_toStartOf="@+id/recyclerRequests"
         app:layout_constraintTop_toTopOf="@+id/recyclerRequests" />
 
     <ImageView
-        android:id="@+id/imageViewAddFriendsListEmpty"
+
+        android:id="@+id/imageViewFriendsListEmpty"
         android:layout_width="300dp"
         android:layout_height="300dp"
         android:layout_marginStart="40dp"

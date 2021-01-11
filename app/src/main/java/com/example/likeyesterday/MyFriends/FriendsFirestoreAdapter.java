@@ -38,7 +38,9 @@ import java.util.Map;
 
 import static com.example.likeyesterday.MyFriends.FriendsListFragment.friendName;
 import static com.example.likeyesterday.MyFriends.FriendsListFragment.friendUid;
+import static com.example.likeyesterday.MyFriends.FriendsListFragment.hideImageView;
 import static com.example.likeyesterday.MyFriends.FriendsListFragment.hideProgressbar;
+import static com.example.likeyesterday.MyFriends.FriendsListFragment.showImageView;
 import static com.example.likeyesterday.MyFriends.FriendsListFragment.showProgressbar;
 import static com.example.likeyesterday.ProfileFragment.currentUserDocumentReference;
 import static com.example.likeyesterday.ProfileFragment.db;
@@ -195,10 +197,15 @@ public class FriendsFirestoreAdapter extends FirestoreRecyclerAdapter<FirestoreR
         Log.i("testinglifecycle","reached ran");
 
         if(getItemCount()>=1){
+            Log.i("testinglifecycle","item count more than 1 on Datachanged Friends Firestore Adapter" );
         hideProgressbar();
+        hideImageView();
         }
         else{
-            showProgressbar();
+            Log.i("testinglifecycle","item count less than 1 on Datachanged Friends Firestore Adapter");
+            showImageView();
+            hideProgressbar();
+
         }
     }
 }

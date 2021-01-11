@@ -21,7 +21,9 @@ import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import static com.example.likeyesterday.MyFriends.FriendsListFragment.hideImageView;
 import static com.example.likeyesterday.MyFriends.FriendsListFragment.hideProgressbar;
+import static com.example.likeyesterday.MyFriends.FriendsListFragment.showImageView;
 import static com.example.likeyesterday.MyFriends.FriendsListFragment.showProgressbar;
 import static com.example.likeyesterday.MyPlaces.MyPlacesListFragment.PlaceName;
 import static com.example.likeyesterday.MyPlaces.MyPlacesListFragment.geopoint;
@@ -96,10 +98,14 @@ public class FriendsPlacesFirestoreAdapter extends FirestoreRecyclerAdapter<Fire
         Log.i("testinglifecycle","reached ran");
 
         if(getItemCount()>=1){
+            Log.i("testinglifecycle","item count more than 1");
             hideProgressbar();
+            hideImageView();
         }
         else{
-            showProgressbar();
+            Log.i("testinglifecycle","item count less than 1");
+            hideProgressbar();
+            showImageView();
         }
     }
 }
