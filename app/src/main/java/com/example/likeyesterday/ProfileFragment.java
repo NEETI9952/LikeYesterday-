@@ -85,8 +85,6 @@ public class ProfileFragment extends Fragment {
                             currentUserDocumentReference.collection("FriendsList").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                                 @Override
                                 public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-
-
                                     friendsCounter=queryDocumentSnapshots.size();
                                     friendsLabel.setText(String.valueOf(friendsCounter));
                                 }

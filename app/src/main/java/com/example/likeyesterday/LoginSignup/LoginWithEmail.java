@@ -7,7 +7,9 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Pair;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -29,7 +31,7 @@ import com.hbb20.CountryCodePicker;
 
 import static android.widget.Toast.LENGTH_SHORT;
 
-public class LoginWithEmail extends AppCompatActivity {
+public class LoginWithEmail extends AppCompatActivity implements View.OnKeyListener {
     ImageView backButton;
     Button createUser,login;
     TextView titleText;
@@ -37,6 +39,16 @@ public class LoginWithEmail extends AppCompatActivity {
     CheckBox checkBox;
 
     public static FirebaseAuth mAuth = FirebaseAuth.getInstance();
+
+    @Override
+    public boolean onKey(View v, int keyCode, KeyEvent event) {
+
+        if(keyCode==KeyEvent.KEYCODE_ENTER && event.getAction()==KeyEvent.ACTION_DOWN){
+            onLogin(v);
+        }
+
+        return false;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,12 +63,11 @@ public class LoginWithEmail extends AppCompatActivity {
         password=findViewById(R.id.loginpassword);
         checkBox=findViewById(R.id.rememberMeCheckBox);
 
+        password.setOnKeyListener(this);
+
         if (mAuth.getCurrentUser() != null) {
             login();
-
         }
-
-
     }
 
     public void  callSignUpScreen(View view){
@@ -145,4 +156,8 @@ public class LoginWithEmail extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
     }
+
 }
+
+//        InputMethodManager inputMethodManager=(InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+//        inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),0);

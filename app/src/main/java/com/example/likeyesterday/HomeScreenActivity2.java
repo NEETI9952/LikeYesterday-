@@ -35,6 +35,7 @@ import static com.example.likeyesterday.ProfileFragment.user;
 import static com.example.likeyesterday.ProfileFragment.uid;
 
 public class HomeScreenActivity2 extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
     private DrawerLayout drawer;
     public static final int CAMERA_PERM_CODE = 101;
     public static final int CAMERA_REQUEST_CODE = 102;

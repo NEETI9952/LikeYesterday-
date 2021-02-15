@@ -59,7 +59,6 @@ public class VerifyOTPLogin extends AppCompatActivity {
         mAuth=FirebaseAuth.getInstance();
         textViewNumber=findViewById(R.id.textViewNumber);
 
-
         phoneNumber=getIntent().getStringExtra("PhoneNumberLogin");
         textViewNumber.setText("Enter One Time Password sent on \n   "+phoneNumber);
 

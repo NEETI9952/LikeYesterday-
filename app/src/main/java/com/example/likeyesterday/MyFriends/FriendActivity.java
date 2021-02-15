@@ -35,8 +35,6 @@ public class FriendActivity extends AppCompatActivity {
     TextView friendNameChatTextView;
     Toolbar toolbar;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
